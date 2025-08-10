@@ -1,10 +1,9 @@
-
 # 💎 Premier League Betting Analysis
 
-> **Free, automated Premier League betting analysis with gem bets and value opportunities**
+> **Free, automated Premier League betting insights with gem bets and value opportunities**
 
-[![Deploy Status](https://github.com/sachiv1984/premier-league-betting.git/actions/workflows/update-betting-analysis.yml/badge.svg)](https://github.com/sachiv1984/premier-league-betting.git/actions)
-[![Website](https://img.shields.io/website?url=https%3A%2F%2Fyourusername.github.io%2Fpremier-league-betting)](https://github.com/sachiv1984/premier-league-betting.git)
+[![Deploy Status](https://github.com/sachiv1984/premier-league-betting/actions/workflows/update-betting-analysis.yml/badge.svg)](https://github.com/sachiv1984/premier-league-betting/actions/workflows/update-betting-analysis.yml)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Fsachiv1984.github.io%2Fpremier-league-betting&label=Live%20Site)](https://sachiv1984.github.io/premier-league-betting)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## 🎯 Features
