@@ -1,0 +1,17 @@
+{
+  "name": "premier-league-betting-analysis",
+  "version": "1.0.0",
+  "description": "Free Premier League betting analysis",
+  "main": "update-analysis.js",
+  "scripts": {
+    "build": "node update-analysis.js",
+    "dev": "node update-analysis.js && cd public && python -m http.server 8000"
+  },
+  "dependencies": {
+    "puppeteer": "^21.0.0",
+    "axios": "^1.5.0"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}
