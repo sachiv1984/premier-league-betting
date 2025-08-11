@@ -5,9 +5,11 @@
   "main": "update-analysis.js",
   "type": "module",
   "scripts": {
-    "build": "node update-analysis.js",
-    "dev": "node update-analysis.js && cd public && python -m http.server 8000",
-    "start": "node update-analysis.js",
+    "scrape-fixtures": "node scrape-fixtures.js",
+    "download-csv": "node download-csv.js",
+    "update-analysis": "node update-analysis.js",
+    "start": "npm run download-csv && npm run update-analysis",
+    "dev": "npm run download-csv && npm run update-analysis && cd public && python3 -m http.server 8000",
     "clean": "rm -rf node_modules package-lock.json && npm install",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -16,17 +18,18 @@
     "betting",
     "analysis",
     "football",
-    "soccer"
+    "soccer",
+    "csv",
+    "automation"
   ],
   "author": "Sachiv1984",
   "license": "MIT",
   "dependencies": {
     "axios": "^1.7.0",
-    "cheerio": "^1.1.2",
-    "node-fetch": "^3.3.2",
+    "csv-parser": "^3.0.0",
     "puppeteer": "^23.0.0"
   },
   "engines": {
-    "node": "22.x"
+    "node": ">=18"
   }
 }
