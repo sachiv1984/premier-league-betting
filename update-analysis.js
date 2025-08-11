@@ -53,6 +53,12 @@ async function main() {
     const odds = await fetchOdds();
     console.log(`Fetched odds for ${odds.length} matches`);
 
+    // Ensure ./public directory exists
+    if (!fs.existsSync('./public')) {
+      fs.mkdirSync('./public');
+      console.log("Created ./public directory");
+    }
+
     // Save JSON files to public folder for frontend
     fs.writeFileSync('./public/upcoming-fixtures.json', JSON.stringify(fixtures, null, 2));
     fs.writeFileSync('./public/odds.json', JSON.stringify(odds, null, 2));
