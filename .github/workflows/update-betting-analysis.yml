@@ -1,8 +1,6 @@
 # .github/workflows/update-betting-analysis.yml
 # This file automates daily updates to your betting analysis
-
 name: Update Premier League Betting Analysis
-
 on:
   schedule:
     # Runs daily at 8:00 AM UTC (9:00 AM BST during summer)
@@ -24,22 +22,22 @@ jobs:
     # Get your repository code
     - name: 📥 Checkout repository
       uses: actions/checkout@v4
-
+      
     # Set up Node.js (free on GitHub Actions)
     - name: 🟢 Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '22'
         cache: 'npm'
-
+        
     # Install dependencies
     - name: 📦 Install dependencies
       run: npm ci
-
+      
     # Install Chrome for Puppeteer (needed for web scraping)
     - name: 🌐 Setup Chrome
       uses: browser-actions/setup-chrome@latest
-
+      
     # Run the analysis script
     - name: 🔍 Generate betting analysis
       run: |
@@ -47,7 +45,9 @@ jobs:
         node update-analysis.js
         echo "Analysis complete!"
         ls -la public/
-
+      env:
+        ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+        
     # Deploy to GitHub Pages
     - name: 🚀 Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
@@ -57,7 +57,7 @@ jobs:
         publish_dir: ./public
         # Optional: Add custom domain
         # cname: yourdomain.com
-
+        
     # Optional: Send notification when complete
     - name: 📱 Success notification
       if: success()
