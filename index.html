@@ -135,6 +135,54 @@
                 font-size: 0.8em;
                 margin-left: 10px;
             }
+            .ai-insight {
+                background: #f0f8ff;
+                border-left: 4px solid #2196f3;
+                padding: 15px;
+                margin-top: 15px;
+                border-radius: 8px;
+            }
+            .bet-suggestion {
+                color: #e74c3c;
+                font-size: 1.1em;
+                font-weight: bold;
+                margin: 10px 0;
+            }
+            .reasoning {
+                color: #555;
+                line-height: 1.5;
+                font-style: italic;
+            }
+            .date-section {
+                margin-bottom: 30px;
+            }
+            .date-header {
+                color: #2c3e50;
+                font-size: 1.3em;
+                margin-bottom: 15px;
+                padding: 10px;
+                background: #ecf0f1;
+                border-radius: 8px;
+                border-left: 4px solid #3498db;
+            }
+            .fixture-card {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: white;
+                padding: 15px;
+                margin-bottom: 8px;
+                border-radius: 8px;
+                border-left: 3px solid #95a5a6;
+            }
+            .fixture-teams {
+                font-weight: bold;
+                color: #2c3e50;
+            }
+            .fixture-time {
+                color: #7f8c8d;
+                font-size: 0.9em;
+            }
             @media (max-width: 768px) {
                 .odds-grid { grid-template-columns: 1fr; }
                 .stats-grid { grid-template-columns: 1fr; }
@@ -154,12 +202,8 @@
                     <div class="stat-label">Upcoming Matches</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-value">6</div>
+                    <div class="stat-value">10</div>
                     <div class="stat-label">Value Opportunities</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">3</div>
-                    <div class="stat-label">Bookmakers Tracked</div>
                 </div>
             </div>
 
@@ -168,482 +212,187 @@
                 
                     <div class="recommendation">
                         <h4>Value Opportunities Found</h4>
-                        <p>6 matches show potential value bets</p>
+                        <p>10 matches show potential value bets based on our analysis</p>
                         
                     </div>
                 
                     <div class="recommendation">
                         <h4>Market Analysis</h4>
-                        <p>Analyzed 10 upcoming Premier League matches</p>
-                        <p><small>Average bookmaker coverage: 3 bookmakers</small></p>
+                        <p>Analyzed 10 upcoming Premier League matches for betting opportunities</p>
+                        
                     </div>
                 
             </div>
 
             
             <div class="matches-section">
-                <h2 class="section-title">💎 Value Opportunities</h2>
+                <h2 class="section-title">💎 AI Betting Insights</h2>
                 
                     <div class="match-card">
                         <div class="match-header">
                             Liverpool vs Bournemouth
-                            <span class="value-badge">VALUE</span>
+                            <span class="value-badge">Medium CONFIDENCE</span>
                         </div>
                         <div class="match-date">
                             Friday, 15 August 2025 at 19:00
                         </div>
-                        <div class="odds-grid">
-                            <div class="odds-item">
-                                <div class="odds-team">Home Win</div>
-                                <div class="odds-value">1.3</div>
-                                <div>76.9%</div>
-                            </div>
-                            <div class="odds-item">
-                                <div class="odds-team">Draw</div>
-                                <div class="odds-value">5.5</div>
-                                <div>18.2%</div>
-                            </div>
-                            <div class="odds-item">
-                                <div class="odds-team">Away Win</div>
-                                <div class="odds-value">9</div>
-                                <div>11.1%</div>
+                        <div class="ai-insight">
+                            <div class="recommendation">
+                                <h4>🎯 Bet on: Draw</h4>
+                                <p class="bet-suggestion"><strong>Draw at 5.5</strong></p>
+                                <p class="reasoning">Draw at 5.5 offers potential value. The bookmakers are giving them only a 18.2% chance, but this could be underestimating their chances.</p>
                             </div>
                         </div>
-                        <small>Source: Paddy Power</small>
                     </div>
                 
                     <div class="match-card">
                         <div class="match-header">
                             Aston Villa vs Newcastle United
-                            <span class="value-badge">VALUE</span>
+                            <span class="value-badge">Medium CONFIDENCE</span>
                         </div>
                         <div class="match-date">
                             Saturday, 16 August 2025 at 11:30
                         </div>
-                        <div class="odds-grid">
-                            <div class="odds-item">
-                                <div class="odds-team">Home Win</div>
-                                <div class="odds-value">2.25</div>
-                                <div>44.4%</div>
-                            </div>
-                            <div class="odds-item">
-                                <div class="odds-team">Draw</div>
-                                <div class="odds-value">3.5</div>
-                                <div>28.6%</div>
-                            </div>
-                            <div class="odds-item">
-                                <div class="odds-team">Away Win</div>
-                                <div class="odds-value">3</div>
-                                <div>33.3%</div>
+                        <div class="ai-insight">
+                            <div class="recommendation">
+                                <h4>🎯 Bet on: Draw</h4>
+                                <p class="bet-suggestion"><strong>Draw at 3.5</strong></p>
+                                <p class="reasoning">Draw at 3.5 offers potential value. The bookmakers are giving them only a 28.6% chance, but this could be underestimating their chances.</p>
                             </div>
                         </div>
-                        <small>Source: Paddy Power</small>
                     </div>
                 
                     <div class="match-card">
                         <div class="match-header">
                             Brighton and Hove Albion vs Fulham
-                            <span class="value-badge">VALUE</span>
+                            <span class="value-badge">Medium CONFIDENCE</span>
                         </div>
                         <div class="match-date">
                             Saturday, 16 August 2025 at 14:00
                         </div>
-                        <div class="odds-grid">
-                            <div class="odds-item">
-                                <div class="odds-team">Home Win</div>
-                                <div class="odds-value">1.87</div>
-                                <div>53.5%</div>
-                            </div>
-                            <div class="odds-item">
-                                <div class="odds-team">Draw</div>
-                                <div class="odds-value">3.6</div>
-                                <div>27.8%</div>
-                            </div>
-                            <div class="odds-item">
-                                <div class="odds-team">Away Win</div>
-                                <div class="odds-value">3.8</div>
-                                <div>26.3%</div>
+                        <div class="ai-insight">
+                            <div class="recommendation">
+                                <h4>🎯 Bet on: Draw</h4>
+                                <p class="bet-suggestion"><strong>Draw at 3.6</strong></p>
+                                <p class="reasoning">Draw at 3.6 offers potential value. The bookmakers are giving them only a 27.8% chance, but this could be underestimating their chances.</p>
                             </div>
                         </div>
-                        <small>Source: Paddy Power</small>
                     </div>
                 
                     <div class="match-card">
                         <div class="match-header">
                             Tottenham Hotspur vs Burnley
-                            <span class="value-badge">VALUE</span>
+                            <span class="value-badge">Medium CONFIDENCE</span>
                         </div>
                         <div class="match-date">
                             Saturday, 16 August 2025 at 14:00
                         </div>
-                        <div class="odds-grid">
-                            <div class="odds-item">
-                                <div class="odds-team">Home Win</div>
-                                <div class="odds-value">1.33</div>
-                                <div>75.2%</div>
-                            </div>
-                            <div class="odds-item">
-                                <div class="odds-team">Draw</div>
-                                <div class="odds-value">4.75</div>
-                                <div>21.1%</div>
-                            </div>
-                            <div class="odds-item">
-                                <div class="odds-team">Away Win</div>
-                                <div class="odds-value">9</div>
-                                <div>11.1%</div>
+                        <div class="ai-insight">
+                            <div class="recommendation">
+                                <h4>🎯 Bet on: Draw</h4>
+                                <p class="bet-suggestion"><strong>Draw at 4.75</strong></p>
+                                <p class="reasoning">Draw at 4.75 offers potential value. The bookmakers are giving them only a 21.1% chance, but this could be underestimating their chances.</p>
                             </div>
                         </div>
-                        <small>Source: Paddy Power</small>
                     </div>
                 
                     <div class="match-card">
                         <div class="match-header">
-                            Wolverhampton Wanderers vs Manchester City
-                            <span class="value-badge">VALUE</span>
+                            Sunderland vs West Ham United
+                            <span class="value-badge">Medium CONFIDENCE</span>
                         </div>
                         <div class="match-date">
-                            Saturday, 16 August 2025 at 16:30
+                            Saturday, 16 August 2025 at 14:00
                         </div>
-                        <div class="odds-grid">
-                            <div class="odds-item">
-                                <div class="odds-team">Home Win</div>
-                                <div class="odds-value">6.5</div>
-                                <div>15.4%</div>
-                            </div>
-                            <div class="odds-item">
-                                <div class="odds-team">Draw</div>
-                                <div class="odds-value">4.75</div>
-                                <div>21.1%</div>
-                            </div>
-                            <div class="odds-item">
-                                <div class="odds-team">Away Win</div>
-                                <div class="odds-value">1.4</div>
-                                <div>71.4%</div>
+                        <div class="ai-insight">
+                            <div class="recommendation">
+                                <h4>🎯 Bet on: Draw</h4>
+                                <p class="bet-suggestion"><strong>Draw at 3.4</strong></p>
+                                <p class="reasoning">The draw at 3.4 could offer value in what looks like an evenly matched game. Both teams may cancel each other out.</p>
                             </div>
                         </div>
-                        <small>Source: Paddy Power</small>
                     </div>
                 
             </div>
             
 
             <div class="matches-section">
-                <h2 class="section-title">🗓️ Upcoming Matches</h2>
+                <h2 class="section-title">🗓️ Upcoming Fixtures</h2>
                 
-                    <div class="match-card">
-                        <div class="match-header">Liverpool vs Bournemouth</div>
-                        <div class="match-date">
-                            Friday, 15 August 2025 at 19:00
-                        </div>
+                    <div class="date-section">
+                        <h3 class="date-header">Friday, 15 August 2025</h3>
                         
-                        <div class="odds-grid">
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Bournemouth</div>
-                                    <div class="odds-value">9</div>
-                                    <div>11.1%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Liverpool</div>
-                                    <div class="odds-value">1.3</div>
-                                    <div>76.9%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Draw</div>
-                                    <div class="odds-value">5.5</div>
-                                    <div>18.2%</div>
-                                </div>
-                            
-                        </div>
-                        <small>Source: Paddy Power</small>
+                            <div class="fixture-card">
+                                <div class="fixture-teams">Liverpool vs Bournemouth</div>
+                                <div class="fixture-time">19:00</div>
+                            </div>
                         
                     </div>
                 
-                    <div class="match-card">
-                        <div class="match-header">Aston Villa vs Newcastle United</div>
-                        <div class="match-date">
-                            Saturday, 16 August 2025 at 11:30
-                        </div>
+                    <div class="date-section">
+                        <h3 class="date-header">Saturday, 16 August 2025</h3>
                         
-                        <div class="odds-grid">
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Aston Villa</div>
-                                    <div class="odds-value">2.25</div>
-                                    <div>44.4%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Newcastle United</div>
-                                    <div class="odds-value">3</div>
-                                    <div>33.3%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Draw</div>
-                                    <div class="odds-value">3.5</div>
-                                    <div>28.6%</div>
-                                </div>
-                            
-                        </div>
-                        <small>Source: Paddy Power</small>
+                            <div class="fixture-card">
+                                <div class="fixture-teams">Aston Villa vs Newcastle United</div>
+                                <div class="fixture-time">11:30</div>
+                            </div>
                         
-                    </div>
-                
-                    <div class="match-card">
-                        <div class="match-header">Brighton and Hove Albion vs Fulham</div>
-                        <div class="match-date">
-                            Saturday, 16 August 2025 at 14:00
-                        </div>
+                            <div class="fixture-card">
+                                <div class="fixture-teams">Brighton and Hove Albion vs Fulham</div>
+                                <div class="fixture-time">14:00</div>
+                            </div>
                         
-                        <div class="odds-grid">
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Brighton and Hove Albion</div>
-                                    <div class="odds-value">1.87</div>
-                                    <div>53.5%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Fulham</div>
-                                    <div class="odds-value">3.8</div>
-                                    <div>26.3%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Draw</div>
-                                    <div class="odds-value">3.6</div>
-                                    <div>27.8%</div>
-                                </div>
-                            
-                        </div>
-                        <small>Source: Paddy Power</small>
+                            <div class="fixture-card">
+                                <div class="fixture-teams">Tottenham Hotspur vs Burnley</div>
+                                <div class="fixture-time">14:00</div>
+                            </div>
+                        
+                            <div class="fixture-card">
+                                <div class="fixture-teams">Sunderland vs West Ham United</div>
+                                <div class="fixture-time">14:00</div>
+                            </div>
+                        
+                            <div class="fixture-card">
+                                <div class="fixture-teams">Wolverhampton Wanderers vs Manchester City</div>
+                                <div class="fixture-time">16:30</div>
+                            </div>
                         
                     </div>
                 
-                    <div class="match-card">
-                        <div class="match-header">Tottenham Hotspur vs Burnley</div>
-                        <div class="match-date">
-                            Saturday, 16 August 2025 at 14:00
-                        </div>
+                    <div class="date-section">
+                        <h3 class="date-header">Sunday, 17 August 2025</h3>
                         
-                        <div class="odds-grid">
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Burnley</div>
-                                    <div class="odds-value">9</div>
-                                    <div>11.1%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Tottenham Hotspur</div>
-                                    <div class="odds-value">1.33</div>
-                                    <div>75.2%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Draw</div>
-                                    <div class="odds-value">4.75</div>
-                                    <div>21.1%</div>
-                                </div>
-                            
-                        </div>
-                        <small>Source: Paddy Power</small>
+                            <div class="fixture-card">
+                                <div class="fixture-teams">Nottingham Forest vs Brentford</div>
+                                <div class="fixture-time">13:00</div>
+                            </div>
+                        
+                            <div class="fixture-card">
+                                <div class="fixture-teams">Chelsea vs Crystal Palace</div>
+                                <div class="fixture-time">13:00</div>
+                            </div>
+                        
+                            <div class="fixture-card">
+                                <div class="fixture-teams">Manchester United vs Arsenal</div>
+                                <div class="fixture-time">15:30</div>
+                            </div>
                         
                     </div>
                 
-                    <div class="match-card">
-                        <div class="match-header">Sunderland vs West Ham United</div>
-                        <div class="match-date">
-                            Saturday, 16 August 2025 at 14:00
-                        </div>
+                    <div class="date-section">
+                        <h3 class="date-header">Monday, 18 August 2025</h3>
                         
-                        <div class="odds-grid">
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Sunderland</div>
-                                    <div class="odds-value">3.25</div>
-                                    <div>30.8%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">West Ham United</div>
-                                    <div class="odds-value">2.2</div>
-                                    <div>45.5%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Draw</div>
-                                    <div class="odds-value">3.4</div>
-                                    <div>29.4%</div>
-                                </div>
-                            
-                        </div>
-                        <small>Source: Paddy Power</small>
-                        
-                    </div>
-                
-                    <div class="match-card">
-                        <div class="match-header">Wolverhampton Wanderers vs Manchester City</div>
-                        <div class="match-date">
-                            Saturday, 16 August 2025 at 16:30
-                        </div>
-                        
-                        <div class="odds-grid">
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Manchester City</div>
-                                    <div class="odds-value">1.4</div>
-                                    <div>71.4%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Wolverhampton Wanderers</div>
-                                    <div class="odds-value">6.5</div>
-                                    <div>15.4%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Draw</div>
-                                    <div class="odds-value">4.75</div>
-                                    <div>21.1%</div>
-                                </div>
-                            
-                        </div>
-                        <small>Source: Paddy Power</small>
-                        
-                    </div>
-                
-                    <div class="match-card">
-                        <div class="match-header">Nottingham Forest vs Brentford</div>
-                        <div class="match-date">
-                            Sunday, 17 August 2025 at 13:00
-                        </div>
-                        
-                        <div class="odds-grid">
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Brentford</div>
-                                    <div class="odds-value">3.3</div>
-                                    <div>30.3%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Nottingham Forest</div>
-                                    <div class="odds-value">2.05</div>
-                                    <div>48.8%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Draw</div>
-                                    <div class="odds-value">3.5</div>
-                                    <div>28.6%</div>
-                                </div>
-                            
-                        </div>
-                        <small>Source: William Hill</small>
-                        
-                    </div>
-                
-                    <div class="match-card">
-                        <div class="match-header">Chelsea vs Crystal Palace</div>
-                        <div class="match-date">
-                            Sunday, 17 August 2025 at 13:00
-                        </div>
-                        
-                        <div class="odds-grid">
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Chelsea</div>
-                                    <div class="odds-value">1.57</div>
-                                    <div>63.7%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Crystal Palace</div>
-                                    <div class="odds-value">5</div>
-                                    <div>20.0%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Draw</div>
-                                    <div class="odds-value">4.33</div>
-                                    <div>23.1%</div>
-                                </div>
-                            
-                        </div>
-                        <small>Source: Paddy Power</small>
-                        
-                    </div>
-                
-                    <div class="match-card">
-                        <div class="match-header">Manchester United vs Arsenal</div>
-                        <div class="match-date">
-                            Sunday, 17 August 2025 at 15:30
-                        </div>
-                        
-                        <div class="odds-grid">
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Arsenal</div>
-                                    <div class="odds-value">2.1</div>
-                                    <div>47.6%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Manchester United</div>
-                                    <div class="odds-value">3.4</div>
-                                    <div>29.4%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Draw</div>
-                                    <div class="odds-value">3.4</div>
-                                    <div>29.4%</div>
-                                </div>
-                            
-                        </div>
-                        <small>Source: Paddy Power</small>
-                        
-                    </div>
-                
-                    <div class="match-card">
-                        <div class="match-header">Leeds United vs Everton</div>
-                        <div class="match-date">
-                            Monday, 18 August 2025 at 19:00
-                        </div>
-                        
-                        <div class="odds-grid">
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Everton</div>
-                                    <div class="odds-value">2.88</div>
-                                    <div>34.7%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Leeds United</div>
-                                    <div class="odds-value">2.45</div>
-                                    <div>40.8%</div>
-                                </div>
-                            
-                                <div class="odds-item">
-                                    <div class="odds-team">Draw</div>
-                                    <div class="odds-value">3.2</div>
-                                    <div>31.3%</div>
-                                </div>
-                            
-                        </div>
-                        <small>Source: Paddy Power</small>
+                            <div class="fixture-card">
+                                <div class="fixture-teams">Leeds United vs Everton</div>
+                                <div class="fixture-time">19:00</div>
+                            </div>
                         
                     </div>
                 
             </div>
 
             <div class="last-updated">
-                Last updated: 11/08/2025, 03:50:23
+                Last updated: 11/08/2025, 04:11:54
             </div>
         </div>
     </body>
