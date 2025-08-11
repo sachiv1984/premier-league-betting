@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 const API_FOOTBALL_KEY = process.env.API_FOOTBALL_KEY;
 const PREMIER_LEAGUE_ID = 39;
-const SEASON = 2023; // Update if needed
+const SEASON = 2024; // Current season
 
 if (!API_FOOTBALL_KEY) {
   console.error("❌ Missing API_FOOTBALL_KEY");
@@ -11,8 +11,7 @@ if (!API_FOOTBALL_KEY) {
 
 async function main() {
   try {
-    const today = new Date().toISOString().split('T')[0];
-    const url = `https://v3.football.api-sports.io/fixtures?league=${PREMIER_LEAGUE_ID}&season=${SEASON}&from=${today}`;
+    const url = `https://v3.football.api-sports.io/fixtures?league=${PREMIER_LEAGUE_ID}&season=${SEASON}&next=10`;
     
     console.log(`📡 Fetching fixtures from: ${url}`);
 
