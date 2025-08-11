@@ -1,8 +1,10 @@
 import puppeteer from 'puppeteer';
+import fs from 'fs/promises';
+import path from 'path';
 
 async function fetchCurrentGameweekFixtures() {
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'], // Crucial for GitHub Actions & similar
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   const page = await browser.newPage();
 
@@ -10,17 +12,13 @@ async function fetchCurrentGameweekFixtures() {
     console.log('Navigating to Premier League matches page...');
     await page.goto('https://www.premierleague.com/matches', { waitUntil: 'networkidle2' });
 
-    // Wait for the matchweek dropdown or active matchweek element
     await page.waitForSelector('.matchWeekDropdown');
 
-    // Extract current matchweek number from the dropdown or active selection
     const currentMatchweek = await page.evaluate(() => {
-      // The active matchweek is highlighted in the dropdown menu
       const activeOption = document.querySelector('.matchWeekDropdown option[selected]');
       if (activeOption) {
         return parseInt(activeOption.textContent.trim().replace('Matchweek ', ''), 10);
       }
-      // Fallback: try to get from URL or another element if needed
       return null;
     });
 
@@ -29,31 +27,21 @@ async function fetchCurrentGameweekFixtures() {
     }
     console.log('Current matchweek:', currentMatchweek);
 
-    // Now navigate specifically to the current matchweek URL (filtered by matchweek)
     const matchweekUrl = `https://www.premierleague.com/en/matches?matchweek=${currentMatchweek}`;
     await page.goto(matchweekUrl, { waitUntil: 'networkidle2' });
 
-    // Wait for matches to load
     await page.waitForSelector('.matchFixtureContainer');
 
-    // Extract fixture data for this matchweek
     const fixtures = await page.evaluate(() => {
       const matches = Array.from(document.querySelectorAll('.matchFixtureContainer'));
       return matches.map(match => {
-        const homeTeam = match.querySelector('.team.home .teamName').textContent.trim();
-        const awayTeam = match.querySelector('.team.away .teamName').textContent.trim();
-
-        // Date/time as text
+        const homeTeam = match.querySelector('.team.home .teamName')?.textContent.trim() || '';
+        const awayTeam = match.querySelector('.team.away .teamName')?.textContent.trim() || '';
         const dateTime = match.querySelector('.fixtureDate')?.textContent.trim() || '';
-
-        // Get match status: "Postponed", "FT", "LIVE", or empty
         const status = match.querySelector('.fixtureStatus')?.textContent.trim() || '';
-
-        // Get score if available (else null)
         const scoreHome = match.querySelector('.score.fullTime .home')?.textContent.trim() || null;
         const scoreAway = match.querySelector('.score.fullTime .away')?.textContent.trim() || null;
 
-        // Return fixture info with score if available
         return {
           homeTeam,
           awayTeam,
@@ -72,18 +60,79 @@ async function fetchCurrentGameweekFixtures() {
   }
 }
 
+function generateHTML(currentMatchweek, fixtures) {
+  // Basic styling + formatting similar to your previous requests
+  const rows = fixtures.map(f => {
+    const scoreDisplay = f.score ? f.score : 'TBD';
+    const statusDisplay = f.status ? `(${f.status})` : '';
+    return `
+      <tr>
+        <td>${f.homeTeam}</td>
+        <td>vs</td>
+        <td>${f.awayTeam}</td>
+        <td>${scoreDisplay} ${statusDisplay}</td>
+        <td>${f.dateTime}</td>
+      </tr>
+    `;
+  }).join('\n');
+
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Premier League Fixtures - Matchweek ${currentMatchweek}</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; background: #f8f9fa; }
+  h1 { color: #2a3d66; }
+  table { border-collapse: collapse; width: 100%; max-width: 700px; margin-top: 20px; }
+  th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+  th { background-color: #2a3d66; color: white; }
+  tr:nth-child(even) { background-color: #f2f2f2; }
+</style>
+</head>
+<body>
+  <h1>Premier League Fixtures - Matchweek ${currentMatchweek}</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Home Team</th>
+        <th></th>
+        <th>Away Team</th>
+        <th>Score & Status</th>
+        <th>Date/Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${rows}
+    </tbody>
+  </table>
+</body>
+</html>
+  `;
+}
+
 async function main() {
   try {
     const { currentMatchweek, fixtures } = await fetchCurrentGameweekFixtures();
-    console.log(`Fixtures for matchweek ${currentMatchweek}:`);
-    fixtures.forEach(fixture => {
-      const scoreDisplay = fixture.score ? `Score: ${fixture.score}` : 'Score: N/A';
-      const statusDisplay = fixture.status ? `Status: ${fixture.status}` : '';
-      console.log(`${fixture.homeTeam} vs ${fixture.awayTeam} | ${fixture.dateTime} | ${scoreDisplay} ${statusDisplay}`);
-    });
+
+    // Generate HTML content
+    const htmlContent = generateHTML(currentMatchweek, fixtures);
+
+    // Ensure ./public directory exists or create it
+    const publicDir = path.resolve('./public');
+    await fs.mkdir(publicDir, { recursive: true });
+
+    // Write to index.html inside public folder
+    const filePath = path.join(publicDir, 'index.html');
+    await fs.writeFile(filePath, htmlContent, 'utf-8');
+
+    console.log(`index.html created with fixtures for matchweek ${currentMatchweek}`);
   } catch (error) {
     console.error('Error during update:', error);
   }
 }
 
 main();
+
