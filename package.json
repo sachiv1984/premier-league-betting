@@ -3,33 +3,28 @@
   "version": "1.0.0",
   "description": "Free Premier League betting analysis",
   "main": "update-analysis.js",
-  "type": "module",
   "scripts": {
-    "scrape-fixtures": "node scrape-fixtures.js",
-    "download-csv": "node download-csv.js",
-    "update-analysis": "node update-analysis.js",
-    "start": "npm run download-csv && npm run update-analysis",
-    "dev": "npm run download-csv && npm run update-analysis && cd public && python3 -m http.server 8000",
-    "clean": "rm -rf node_modules package-lock.json && npm install",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "scrape": "node scrape-fixtures.js 1",
+    "analyze": "node update-analysis.js",
+    "start": "npm run scrape && npm run analyze",
+    "clean": "rm -rf node_modules package-lock.json && npm install"
   },
   "keywords": [
     "premier-league",
     "betting",
     "analysis",
     "football",
-    "soccer",
-    "csv",
-    "automation"
+    "soccer"
   ],
   "author": "Sachiv1984",
   "license": "MIT",
   "dependencies": {
     "axios": "^1.7.0",
-    "csv-parser": "^3.0.0",
+    "cheerio": "^1.1.2",
+    "node-fetch": "^3.3.2",
     "puppeteer": "^23.0.0"
   },
   "engines": {
-    "node": ">=18"
+    "node": "22.x"
   }
 }
