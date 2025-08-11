@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 
 const API_FOOTBALL_KEY = process.env.API_FOOTBALL_KEY;
 const PREMIER_LEAGUE_ID = 39;
-const SEASON = 2024; // Current season
+const SEASON = 2023; // Current season
 
 if (!API_FOOTBALL_KEY) {
   console.error("❌ Missing API_FOOTBALL_KEY");
