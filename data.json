@@ -1,0 +1,78 @@
+{
+  "generated_at": "11/08/2025, 03:22:14",
+  "fixtures": [
+    {
+      "date": "Fri 15 Aug",
+      "time": "20:00",
+      "home": "Liverpool",
+      "away": "Bournemouth"
+    },
+    {
+      "date": "Sat 16 Aug",
+      "time": "15:00",
+      "home": "Brighton",
+      "away": "Crystal Palace"
+    },
+    {
+      "date": "Sun 17 Aug",
+      "time": "16:30",
+      "home": "Manchester United",
+      "away": "Arsenal"
+    }
+  ],
+  "odds": {
+    "Liverpool vs Bournemouth": {
+      "home": 1.25,
+      "draw": 6,
+      "away": 9.5
+    },
+    "Brighton vs Crystal Palace": {
+      "home": 2.1,
+      "draw": 3.2,
+      "away": 3.4
+    },
+    "Manchester United vs Arsenal": {
+      "home": 3.2,
+      "draw": 3.4,
+      "away": 2.15
+    }
+  },
+  "gemBets": [
+    {
+      "player": "Mohamed Salah",
+      "bet": "Salah 3+ Shots",
+      "odds": "1.66",
+      "fixture": "Liverpool vs Bournemouth",
+      "confidence": 84,
+      "reasoning": "Mohamed Salah averages 4.2 shots per 90. Scored 4 in last 5 games. Home advantage and opposition defensive record suggest value at current odds."
+    },
+    {
+      "player": "Gabriel Jesus",
+      "bet": "Jesus 3+ Shots",
+      "odds": "1.74",
+      "fixture": "Manchester United vs Arsenal",
+      "confidence": 76,
+      "reasoning": "Gabriel Jesus averages 3.8 shots per 90. Scored 3 in last 5 games. Home advantage and opposition defensive record suggest value at current odds."
+    }
+  ],
+  "playerStats": [
+    {
+      "player": "Mohamed Salah",
+      "team": "Liverpool",
+      "shots_per_90": 4.2,
+      "goals_last_5": 4
+    },
+    {
+      "player": "Erling Haaland",
+      "team": "Manchester City",
+      "shots_per_90": 5.1,
+      "goals_last_5": 6
+    },
+    {
+      "player": "Gabriel Jesus",
+      "team": "Arsenal",
+      "shots_per_90": 3.8,
+      "goals_last_5": 3
+    }
+  ]
+}
