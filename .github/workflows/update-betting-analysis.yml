@@ -10,7 +10,6 @@ on:
 jobs:
   update-analysis:
     runs-on: ubuntu-latest
-    fail-fast: true  # Fail entire workflow on any job failure
 
     steps:
     - name: 📥 Checkout repository
