@@ -1,53 +1,69 @@
 import puppeteer from 'puppeteer';
-import fs from 'fs';
+import fs from 'fs/promises';
 
-async function scrapeFixtures() {
+async function fetchFixturesForMatchweek(matchweek) {
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'], // for CI/CD environments
+    headless: true,
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
   });
   const page = await browser.newPage();
 
-  // Go to BBC Premier League fixtures page
-  await page.goto('https://www.bbc.com/sport/football/premier-league/scores-fixtures', { waitUntil: 'networkidle2' });
+  await page.goto('https://www.premierleague.com/fixtures', {
+    waitUntil: 'networkidle2',
+    timeout: 60000,
+  });
+  console.log('Page loaded');
 
-  // Wait for fixtures container
-  await page.waitForSelector('.qa-match-block');
+  await page.waitForSelector('.matchListContainer', { timeout: 60000 });
 
-  // Extract fixture data
+  await page.evaluate((mw) => {
+    const buttons = Array.from(document.querySelectorAll('.matchWeekDropdown button, .matchWeek button'));
+    const target = buttons.find(btn => btn.textContent.trim() === `Matchweek ${mw}`);
+    if (target) target.click();
+  }, matchweek);
+
+  await page.waitForTimeout(3000);
+
+  await page.waitForSelector('.fixture, .matchFixtureContainer', { timeout: 60000 });
+
   const fixtures = await page.evaluate(() => {
-    const weeks = [];
-    const blocks = document.querySelectorAll('.qa-match-block');
-
-    blocks.forEach(block => {
-      const matchweekDate = block.querySelector('h3').innerText.trim(); // e.g. "Saturday 12 August 2023"
-      const matches = [];
-      block.querySelectorAll('.gs-o-list-ui__item').forEach(matchEl => {
-        const teams = matchEl.querySelectorAll('.gs-o-list-ui__item .gs-u-display-none.gs-u-display-block@m.qa-full-team-name');
-        const homeTeam = teams[0]?.innerText.trim();
-        const awayTeam = teams[1]?.innerText.trim();
-        const scoreEl = matchEl.querySelector('.sp-c-fixture__number--ft');
-        const score = scoreEl ? scoreEl.innerText.trim() : null;
-        const kickoffEl = matchEl.querySelector('.sp-c-fixture__number--time');
-        const kickoff = kickoffEl ? kickoffEl.innerText.trim() : null;
-
-        matches.push({
-          homeTeam,
-          awayTeam,
-          score,
-          kickoff,
-        });
+    const matches = [];
+    const fixtureElements = document.querySelectorAll('.fixture, .matchFixtureContainer');
+    fixtureElements.forEach(fixture => {
+      const home = fixture.querySelector('.team.home .teamName, .home .teamName');
+      const away = fixture.querySelector('.team.away .teamName, .away .teamName');
+      const status = fixture.querySelector('.status, .matchStatus');
+      const scoreHome = fixture.querySelector('.score .home, .scoreHome');
+      const scoreAway = fixture.querySelector('.score .away, .scoreAway');
+      matches.push({
+        homeTeam: home?.textContent.trim() ?? null,
+        awayTeam: away?.textContent.trim() ?? null,
+        status: status?.textContent.trim() ?? null,
+        scoreHome: scoreHome?.textContent.trim() ?? null,
+        scoreAway: scoreAway?.textContent.trim() ?? null,
       });
-      weeks.push({ date: matchweekDate, matches });
     });
-
-    return weeks;
+    return matches;
   });
 
   await browser.close();
-
-  // Save the data to JSON
-  fs.writeFileSync('./public/fixtures.json', JSON.stringify(fixtures, null, 2));
-  console.log('Fixtures saved to public/fixtures.json');
+  return fixtures;
 }
 
-scrapeFixtures().catch(console.error);
+// Parse CLI args to get matchweek (default to 1)
+const matchweek = process.argv[2] ? Number(process.argv[2]) : 1;
+
+async function main() {
+  try {
+    const fixtures = await fetchFixturesForMatchweek(matchweek);
+    console.log('Fixtures fetched:', fixtures.length);
+
+    await fs.writeFile(`./public/fixtures-matchweek-${matchweek}.json`, JSON.stringify(fixtures, null, 2));
+    console.log(`Fixtures saved to ./public/fixtures-matchweek-${matchweek}.json`);
+  } catch (err) {
+    console.error('Error scraping fixtures:', err);
+    process.exit(1);
+  }
+}
+
+main();
