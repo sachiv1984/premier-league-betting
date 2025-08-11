@@ -2,8 +2,7 @@ name: Update Premier League Betting Analysis
 
 on:
   schedule:
-    # Every day at 08:00 UTC (9:00 BST in summer)
-    - cron: '0 8 * * *'
+    - cron: '0 8 * * *'  # Daily at 08:00 UTC
   workflow_dispatch:
   push:
     branches: [ main ]
@@ -13,40 +12,43 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: 🟢 Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: npm ci
 
-      - name: Setup Chrome (for Puppeteer if needed)
+      - name: 🗂️ Create public directory if missing
+        run: mkdir -p ./public
+
+      - name: 🌐 Setup Chrome for Puppeteer
         uses: browser-actions/setup-chrome@latest
 
-      - name: Run analysis script with debug logs
+      - name: 🔍 Run betting analysis script
         run: |
           echo "Running betting analysis..."
           node update-analysis.js
           echo "Analysis complete!"
           ls -la ./public
         env:
-          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
           ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
 
-      - name: Deploy to GitHub Pages
+      - name: 🚀 Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
 
-      - name: Notify success
+      - name: 📱 Notify success
         if: success()
         run: |
-          echo "✅ Betting analysis updated and deployed successfully!"
-          echo "Site URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          echo "✅ Betting analysis updated successfully!"
+          echo "🌐 Site live at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
