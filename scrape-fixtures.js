@@ -8,39 +8,31 @@ async function fetchFixturesForMatchweek(matchweek) {
   });
   const page = await browser.newPage();
 
-  // Set user agent to avoid bot detection
-  await page.setUserAgent(
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 ' +
-    '(KHTML, like Gecko) Chrome/115.0 Safari/537.36'
-  );
-
   try {
+    // Go to fixtures page
     await page.goto('https://www.premierleague.com/fixtures', {
       waitUntil: 'networkidle2',
       timeout: 60000,
     });
     console.log('Page loaded');
 
-    // Wait extra time for JS to render
-    await page.waitForTimeout(5000);
+    // Wait longer for dropdown or container to appear
+    await page.waitForSelector('.matchListContainer', { timeout: 60000 });
 
-    // Wait for the fixtures container
-    await page.waitForSelector('.fixtures', { timeout: 60000 });
-
-    // Select the matchweek button and click it
+    // Select the matchweek from dropdown/buttons
     await page.evaluate((mw) => {
       const buttons = Array.from(document.querySelectorAll('.matchWeekDropdown button, .matchWeek button'));
       const target = buttons.find(btn => btn.textContent.trim() === `Matchweek ${mw}`);
       if (target) target.click();
     }, matchweek);
 
-    // Wait for fixtures to update after clicking matchweek
-    await page.waitForTimeout(3000);
+    // Wait for fixtures to update after clicking matchweek (use Promise timeout instead of waitForTimeout)
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
-    // Wait again for the updated fixtures to appear
+    // Wait for fixture container again
     await page.waitForSelector('.fixture, .matchFixtureContainer', { timeout: 60000 });
 
-    // Extract matches info
+    // Extract match data
     const fixtures = await page.evaluate(() => {
       const matches = [];
       const fixtureElements = document.querySelectorAll('.fixture, .matchFixtureContainer');
@@ -63,21 +55,22 @@ async function fetchFixturesForMatchweek(matchweek) {
 
     await browser.close();
     return fixtures;
-
   } catch (error) {
     await browser.close();
-    throw new Error('Error scraping fixtures: ' + error.message);
+    throw new Error(`Error scraping fixtures: ${error.message}`);
   }
 }
 
 async function main() {
   try {
-    const matchweek = process.argv[2] || 1; // Pass matchweek as CLI argument, default 1
+    const matchweek = process.argv[2] ? Number(process.argv[2]) : 1;
     console.log(`Scraping fixtures for matchweek ${matchweek}...`);
 
     const fixtures = await fetchFixturesForMatchweek(matchweek);
-    console.log('Fixtures:', fixtures);
 
+    console.log(`Fetched ${fixtures.length} fixtures.`);
+
+    // Save to JSON file
     await fs.writeFile(`./public/fixtures-matchweek-${matchweek}.json`, JSON.stringify(fixtures, null, 2));
     console.log('Fixtures saved.');
   } catch (err) {
