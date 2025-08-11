@@ -10,11 +10,11 @@
       {
         "key": "paddypower",
         "title": "Paddy Power",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Bournemouth",
@@ -35,11 +35,11 @@
       {
         "key": "coral",
         "title": "Coral",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Bournemouth",
@@ -60,11 +60,11 @@
       {
         "key": "betfair_sb_uk",
         "title": "Betfair Sportsbook",
-        "last_update": "2025-08-11T09:56:45Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:45Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Bournemouth",
@@ -126,11 +126,11 @@
       {
         "key": "smarkets",
         "title": "Smarkets",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Bournemouth",
@@ -148,7 +148,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Bournemouth",
@@ -408,11 +408,11 @@
       {
         "key": "boylesports",
         "title": "BoyleSports",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:49Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:49Z",
             "outcomes": [
               {
                 "name": "Bournemouth",
@@ -526,11 +526,11 @@
       {
         "key": "matchbook",
         "title": "Matchbook",
-        "last_update": "2025-08-11T09:56:37Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Bournemouth",
@@ -548,7 +548,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Bournemouth",
@@ -566,7 +566,7 @@
           },
           {
             "key": "spreads",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Bournemouth",
@@ -582,7 +582,7 @@
           },
           {
             "key": "totals",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -611,11 +611,11 @@
       {
         "key": "paddypower",
         "title": "Paddy Power",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Aston Villa",
@@ -636,11 +636,11 @@
       {
         "key": "coral",
         "title": "Coral",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Aston Villa",
@@ -661,11 +661,11 @@
       {
         "key": "betfair_sb_uk",
         "title": "Betfair Sportsbook",
-        "last_update": "2025-08-11T09:56:45Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:45Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Aston Villa",
@@ -727,11 +727,11 @@
       {
         "key": "smarkets",
         "title": "Smarkets",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Aston Villa",
@@ -749,7 +749,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Aston Villa",
@@ -1009,11 +1009,11 @@
       {
         "key": "boylesports",
         "title": "BoyleSports",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:49Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:49Z",
             "outcomes": [
               {
                 "name": "Aston Villa",
@@ -1127,11 +1127,11 @@
       {
         "key": "matchbook",
         "title": "Matchbook",
-        "last_update": "2025-08-11T09:56:37Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Aston Villa",
@@ -1149,7 +1149,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Aston Villa",
@@ -1167,7 +1167,7 @@
           },
           {
             "key": "spreads",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Aston Villa",
@@ -1183,7 +1183,7 @@
           },
           {
             "key": "totals",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -1212,11 +1212,11 @@
       {
         "key": "paddypower",
         "title": "Paddy Power",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Brighton and Hove Albion",
@@ -1237,11 +1237,11 @@
       {
         "key": "coral",
         "title": "Coral",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Brighton and Hove Albion",
@@ -1262,11 +1262,11 @@
       {
         "key": "betfair_sb_uk",
         "title": "Betfair Sportsbook",
-        "last_update": "2025-08-11T09:56:45Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:45Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Brighton and Hove Albion",
@@ -1328,11 +1328,11 @@
       {
         "key": "smarkets",
         "title": "Smarkets",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Brighton and Hove Albion",
@@ -1350,7 +1350,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Brighton and Hove Albion",
@@ -1610,11 +1610,11 @@
       {
         "key": "boylesports",
         "title": "BoyleSports",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:49Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:49Z",
             "outcomes": [
               {
                 "name": "Brighton and Hove Albion",
@@ -1728,11 +1728,11 @@
       {
         "key": "matchbook",
         "title": "Matchbook",
-        "last_update": "2025-08-11T09:56:37Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Brighton and Hove Albion",
@@ -1750,7 +1750,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Brighton and Hove Albion",
@@ -1768,7 +1768,7 @@
           },
           {
             "key": "spreads",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Brighton and Hove Albion",
@@ -1784,7 +1784,7 @@
           },
           {
             "key": "totals",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -1813,11 +1813,11 @@
       {
         "key": "paddypower",
         "title": "Paddy Power",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Burnley",
@@ -1838,11 +1838,11 @@
       {
         "key": "coral",
         "title": "Coral",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Burnley",
@@ -1863,11 +1863,11 @@
       {
         "key": "betfair_sb_uk",
         "title": "Betfair Sportsbook",
-        "last_update": "2025-08-11T09:56:45Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:45Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Burnley",
@@ -1929,11 +1929,11 @@
       {
         "key": "smarkets",
         "title": "Smarkets",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Burnley",
@@ -1951,7 +1951,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Burnley",
@@ -2211,11 +2211,11 @@
       {
         "key": "boylesports",
         "title": "BoyleSports",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:49Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:49Z",
             "outcomes": [
               {
                 "name": "Burnley",
@@ -2329,11 +2329,11 @@
       {
         "key": "matchbook",
         "title": "Matchbook",
-        "last_update": "2025-08-11T09:56:37Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Burnley",
@@ -2351,7 +2351,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Burnley",
@@ -2369,7 +2369,7 @@
           },
           {
             "key": "spreads",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Burnley",
@@ -2385,7 +2385,7 @@
           },
           {
             "key": "totals",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -2414,11 +2414,11 @@
       {
         "key": "paddypower",
         "title": "Paddy Power",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Sunderland",
@@ -2439,11 +2439,11 @@
       {
         "key": "coral",
         "title": "Coral",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Sunderland",
@@ -2464,11 +2464,11 @@
       {
         "key": "betfair_sb_uk",
         "title": "Betfair Sportsbook",
-        "last_update": "2025-08-11T09:56:45Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:45Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Sunderland",
@@ -2530,11 +2530,11 @@
       {
         "key": "smarkets",
         "title": "Smarkets",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Sunderland",
@@ -2552,7 +2552,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Sunderland",
@@ -2812,11 +2812,11 @@
       {
         "key": "boylesports",
         "title": "BoyleSports",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:49Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:49Z",
             "outcomes": [
               {
                 "name": "Sunderland",
@@ -2930,11 +2930,11 @@
       {
         "key": "matchbook",
         "title": "Matchbook",
-        "last_update": "2025-08-11T09:56:37Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Sunderland",
@@ -2952,7 +2952,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Sunderland",
@@ -2970,7 +2970,7 @@
           },
           {
             "key": "spreads",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Sunderland",
@@ -2986,7 +2986,7 @@
           },
           {
             "key": "totals",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -3015,11 +3015,11 @@
       {
         "key": "paddypower",
         "title": "Paddy Power",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Manchester City",
@@ -3040,11 +3040,11 @@
       {
         "key": "coral",
         "title": "Coral",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Manchester City",
@@ -3065,11 +3065,11 @@
       {
         "key": "betfair_sb_uk",
         "title": "Betfair Sportsbook",
-        "last_update": "2025-08-11T09:56:45Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:45Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Manchester City",
@@ -3131,11 +3131,11 @@
       {
         "key": "smarkets",
         "title": "Smarkets",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Manchester City",
@@ -3153,7 +3153,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Manchester City",
@@ -3413,11 +3413,11 @@
       {
         "key": "boylesports",
         "title": "BoyleSports",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:49Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:49Z",
             "outcomes": [
               {
                 "name": "Manchester City",
@@ -3531,11 +3531,11 @@
       {
         "key": "matchbook",
         "title": "Matchbook",
-        "last_update": "2025-08-11T09:56:37Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Manchester City",
@@ -3553,7 +3553,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Manchester City",
@@ -3571,7 +3571,7 @@
           },
           {
             "key": "spreads",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Manchester City",
@@ -3587,7 +3587,7 @@
           },
           {
             "key": "totals",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -3641,11 +3641,11 @@
       {
         "key": "boylesports",
         "title": "BoyleSports",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:49Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:49Z",
             "outcomes": [
               {
                 "name": "Brentford",
@@ -3732,11 +3732,11 @@
       {
         "key": "smarkets",
         "title": "Smarkets",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Brentford",
@@ -3754,7 +3754,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Brentford",
@@ -3775,11 +3775,11 @@
       {
         "key": "paddypower",
         "title": "Paddy Power",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Brentford",
@@ -3843,11 +3843,11 @@
       {
         "key": "betfair_sb_uk",
         "title": "Betfair Sportsbook",
-        "last_update": "2025-08-11T09:56:45Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:45Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Brentford",
@@ -4057,11 +4057,11 @@
       {
         "key": "coral",
         "title": "Coral",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Brentford",
@@ -4107,11 +4107,11 @@
       {
         "key": "matchbook",
         "title": "Matchbook",
-        "last_update": "2025-08-11T09:56:37Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Brentford",
@@ -4129,7 +4129,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Brentford",
@@ -4147,7 +4147,7 @@
           },
           {
             "key": "spreads",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Brentford",
@@ -4163,7 +4163,7 @@
           },
           {
             "key": "totals",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -4217,11 +4217,11 @@
       {
         "key": "paddypower",
         "title": "Paddy Power",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Chelsea",
@@ -4242,11 +4242,11 @@
       {
         "key": "coral",
         "title": "Coral",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Chelsea",
@@ -4267,11 +4267,11 @@
       {
         "key": "betfair_sb_uk",
         "title": "Betfair Sportsbook",
-        "last_update": "2025-08-11T09:56:45Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:45Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Chelsea",
@@ -4333,11 +4333,11 @@
       {
         "key": "smarkets",
         "title": "Smarkets",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Chelsea",
@@ -4355,7 +4355,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Chelsea",
@@ -4615,11 +4615,11 @@
       {
         "key": "boylesports",
         "title": "BoyleSports",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:49Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:49Z",
             "outcomes": [
               {
                 "name": "Chelsea",
@@ -4733,11 +4733,11 @@
       {
         "key": "matchbook",
         "title": "Matchbook",
-        "last_update": "2025-08-11T09:56:37Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "spreads",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Chelsea",
@@ -4753,7 +4753,7 @@
           },
           {
             "key": "totals",
-            "last_update": "2025-08-11T09:56:37Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Over",
@@ -4782,11 +4782,11 @@
       {
         "key": "paddypower",
         "title": "Paddy Power",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Arsenal",
@@ -4807,11 +4807,11 @@
       {
         "key": "coral",
         "title": "Coral",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Arsenal",
@@ -4832,11 +4832,11 @@
       {
         "key": "betfair_sb_uk",
         "title": "Betfair Sportsbook",
-        "last_update": "2025-08-11T09:56:45Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:45Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Arsenal",
@@ -4898,11 +4898,11 @@
       {
         "key": "smarkets",
         "title": "Smarkets",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Arsenal",
@@ -4920,7 +4920,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Arsenal",
@@ -5180,11 +5180,11 @@
       {
         "key": "boylesports",
         "title": "BoyleSports",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:49Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:49Z",
             "outcomes": [
               {
                 "name": "Arsenal",
@@ -5308,11 +5308,11 @@
       {
         "key": "paddypower",
         "title": "Paddy Power",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Everton",
@@ -5333,11 +5333,11 @@
       {
         "key": "coral",
         "title": "Coral",
-        "last_update": "2025-08-11T09:55:29Z",
+        "last_update": "2025-08-11T09:57:47Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:55:29Z",
+            "last_update": "2025-08-11T09:57:47Z",
             "outcomes": [
               {
                 "name": "Everton",
@@ -5358,11 +5358,11 @@
       {
         "key": "smarkets",
         "title": "Smarkets",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:48Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Everton",
@@ -5380,7 +5380,7 @@
           },
           {
             "key": "h2h_lay",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:48Z",
             "outcomes": [
               {
                 "name": "Everton",
@@ -5517,11 +5517,11 @@
       {
         "key": "boylesports",
         "title": "BoyleSports",
-        "last_update": "2025-08-11T09:56:38Z",
+        "last_update": "2025-08-11T09:57:49Z",
         "markets": [
           {
             "key": "h2h",
-            "last_update": "2025-08-11T09:56:38Z",
+            "last_update": "2025-08-11T09:57:49Z",
             "outcomes": [
               {
                 "name": "Everton",
