@@ -2,8 +2,7 @@ name: Update Premier League Betting Analysis
 
 on:
   schedule:
-    # Runs daily at 8:00 AM UTC
-    - cron: '0 8 * * *'
+    - cron: '0 8 * * *'  # Daily at 8:00 AM UTC
   workflow_dispatch:
   push:
     branches: [ main ]
@@ -11,38 +10,24 @@ on:
 jobs:
   update-analysis:
     runs-on: ubuntu-latest
-    continue-on-error: false  # Fail fast on error
+    fail-fast: true  # Fail entire workflow on any job failure
 
     steps:
     - name: 📥 Checkout repository
       uses: actions/checkout@v4
-
-    - name: 🐛 Debug: List repo files before install
-      run: ls -la
-
+      
     - name: 🟢 Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '22'
         cache: 'npm'
-
+        
     - name: 📦 Install dependencies
       run: npm ci
-
-    - name: 🐛 Debug: List repo files after install
-      run: ls -la
-
+      
     - name: 🌐 Setup Chrome
       uses: browser-actions/setup-chrome@latest
-
-    - name: 🐛 Debug: Print environment variables (masked)
-      run: |
-        echo "ODDS_API_KEY is set: ${ODDS_API_KEY:0:4}****"
-        echo "API_FOOTBALL_KEY is set: ${API_FOOTBALL_KEY:0:4}****"
-      env:
-        ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
-        API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
-
+      
     - name: 🔍 Generate betting analysis
       run: |
         echo "Starting betting analysis generation..."
@@ -53,8 +38,11 @@ jobs:
         ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
         API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
 
-    - name: 🐛 Debug: List files in public before deploy
-      run: ls -la public/
+    - name: 🐛 Debugging info - Show node version and npm list
+      run: |
+        node --version
+        npm --version
+        npm list --depth=0
 
     - name: 🚀 Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
@@ -62,9 +50,9 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./public
-
+        
     - name: 📱 Success notification
       if: success()
       run: |
         echo "✅ Betting analysis updated successfully!"
-        echo "🌐 Site will be live at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
+        echo "🌐 Site live at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
