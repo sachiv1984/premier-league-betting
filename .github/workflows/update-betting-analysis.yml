@@ -30,9 +30,28 @@ jobs:
       - name: 🌐 Setup Chrome for Puppeteer
         uses: browser-actions/setup-chrome@latest
 
-      - name: 🧹 Clear previous fixtures cache (optional)
-        run: rm -f ./fixtures.json ./matchweeks.json || true
+      - name: 🔎 Scrape fixtures for matchweek 1
+        run: node scrape-fixtures.js 1
 
-      - name: 🔄 Run scraping script to fetch all fixtures & build matchweeks
+      - name: 🔍 Run betting analysis script
         run: |
-          echo "Running scraping of all Pre
+          echo "Running betting analysis..."
+          node update-analysis.js 1
+          echo "Analysis complete!"
+          ls -la ./public
+        env:
+          ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+          API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
+
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+
+      - name: 📱 Notify success
+        if: success()
+        run: |
+          echo "✅ Betting analysis updated successfully!"
+          echo "🌐 Site live at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}"
