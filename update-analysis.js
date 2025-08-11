@@ -160,34 +160,89 @@ class PremierLeagueBettingAnalyzer {
     const awayProb = awayOdds ? (1 / awayOdds * 100).toFixed(1) : null;
     const drawProb = drawOdds ? (1 / drawOdds * 100).toFixed(1) : null;
 
-    // Simple value detection (you can enhance this with more sophisticated models)
-    const hasValue = this.detectValue(homeOdds, awayOdds, drawOdds);
+    // Enhanced value detection and recommendation logic
+    const analysis = this.detectValueAndRecommendation(match.home_team, match.away_team, homeOdds, awayOdds, drawOdds, homeProb, awayProb, drawProb);
 
     return {
-      hasValue,
+      hasValue: analysis.hasValue,
       homeOdds: parseFloat(homeOdds),
       awayOdds: parseFloat(awayOdds),
       drawOdds: parseFloat(drawOdds),
       homeProb,
       awayProb,
       drawProb,
-      bookmaker: match.bookmakers[0].title
+      bookmaker: match.bookmakers[0].title,
+      recommendation: analysis.recommendation,
+      reasoning: analysis.reasoning,
+      suggestedBet: analysis.suggestedBet,
+      confidence: analysis.confidence
     };
   }
 
-  detectValue(homeOdds, awayOdds, drawOdds) {
-    // Simple value detection logic
-    // You can enhance this with historical data, team form, etc.
-    
-    if (!homeOdds || !awayOdds || !drawOdds) return false;
-    
-    // Look for odds that seem unusually high
-    const avgOdds = (parseFloat(homeOdds) + parseFloat(awayOdds) + parseFloat(drawOdds)) / 3;
-    const threshold = avgOdds * 1.2; // 20% above average
-    
-    return parseFloat(homeOdds) > threshold || 
-           parseFloat(awayOdds) > threshold || 
-           parseFloat(drawOdds) > threshold;
+  detectValueAndRecommendation(homeTeam, awayTeam, homeOdds, awayOdds, drawOdds, homeProb, awayProb, drawProb) {
+    if (!homeOdds || !awayOdds || !drawOdds) {
+      return { hasValue: false };
+    }
+
+    const odds = [
+      { type: 'Home Win', team: homeTeam, odds: parseFloat(homeOdds), prob: parseFloat(homeProb) },
+      { type: 'Draw', team: 'Draw', odds: parseFloat(drawOdds), prob: parseFloat(drawProb) },
+      { type: 'Away Win', team: awayTeam, odds: parseFloat(awayOdds), prob: parseFloat(awayProb) }
+    ];
+
+    // Look for value opportunities
+    let bestValue = null;
+    let reasoning = "";
+    let confidence = "Medium";
+
+    // Check for high odds that might represent value
+    const highOddsThreshold = 3.5;
+    const lowOddsThreshold = 1.8;
+
+    // Look for underdog value
+    const highOddsOptions = odds.filter(o => o.odds >= highOddsThreshold);
+    if (highOddsOptions.length > 0) {
+      const best = highOddsOptions[0];
+      bestValue = best;
+      reasoning = `${best.team} at ${best.odds} offers potential value. The bookmakers are giving them only a ${best.prob}% chance, but this could be underestimating their chances.`;
+      confidence = "Medium";
+    }
+
+    // Look for favorite value (shorter odds but safer)
+    if (!bestValue) {
+      const favoriteOptions = odds.filter(o => o.odds <= lowOddsThreshold && o.odds >= 1.4);
+      if (favoriteOptions.length > 0) {
+        const best = favoriteOptions[0];
+        bestValue = best;
+        reasoning = `${best.team} at ${best.odds} represents solid value for a safer bet. With a ${best.prob}% implied probability, this looks like a strong favorite.`;
+        confidence = "High";
+      }
+    }
+
+    // Look for draw value (often overlooked)
+    if (!bestValue) {
+      const drawOption = odds.find(o => o.type === 'Draw');
+      if (drawOption && drawOption.odds >= 3.0 && drawOption.odds <= 4.0) {
+        bestValue = drawOption;
+        reasoning = `The draw at ${drawOption.odds} could offer value in what looks like an evenly matched game. Both teams may cancel each other out.`;
+        confidence = "Medium";
+      }
+    }
+
+    // Fallback - pick best odds if no clear value
+    if (!bestValue) {
+      bestValue = odds.reduce((max, current) => current.odds > max.odds ? current : max);
+      reasoning = `${bestValue.team} offers the highest odds at ${bestValue.odds}. While not clear value, it's worth considering if you believe the bookmakers have underestimated them.`;
+      confidence = "Low";
+    }
+
+    return {
+      hasValue: bestValue !== null,
+      recommendation: bestValue ? `Bet on: ${bestValue.type}` : null,
+      reasoning: reasoning,
+      suggestedBet: bestValue ? `${bestValue.team} at ${bestValue.odds}` : null,
+      confidence: confidence
+    };
   }
 
   generateRecommendations(analysis) {
@@ -197,7 +252,7 @@ class PremierLeagueBettingAnalyzer {
       recommendations.push({
         type: 'value',
         title: 'Value Opportunities Found',
-        description: `${analysis.valueOpportunities.length} matches show potential value bets`,
+        description: `${analysis.valueOpportunities.length} matches show potential value bets based on our analysis`,
         matches: analysis.valueOpportunities.slice(0, 3) // Top 3
       });
     }
@@ -206,14 +261,42 @@ class PremierLeagueBettingAnalyzer {
     recommendations.push({
       type: 'info',
       title: 'Market Analysis',
-      description: `Analyzed ${analysis.totalMatches} upcoming Premier League matches`,
-      summary: `Average bookmaker coverage: ${Object.keys(analysis.bookmakerComparison).length} bookmakers`
+      description: `Analyzed ${analysis.totalMatches} upcoming Premier League matches for betting opportunities`
     });
 
     return recommendations;
   }
 
-  generateHTML() {
+  groupMatchesByDate() {
+    const grouped = {};
+    
+    this.matches.forEach(match => {
+      const date = new Date(match.commence_time);
+      const dateKey = date.toLocaleDateString('en-GB', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+      
+      if (!grouped[dateKey]) {
+        grouped[dateKey] = [];
+      }
+      grouped[dateKey].push(match);
+    });
+
+    // Convert to array and sort by date
+    return Object.entries(grouped)
+      .map(([date, matches]) => ({
+        date,
+        matches: matches.sort((a, b) => new Date(a.commence_time) - new Date(b.commence_time))
+      }))
+      .sort((a, b) => {
+        const dateA = new Date(a.matches[0].commence_time);
+        const dateB = new Date(b.matches[0].commence_time);
+        return dateA - dateB;
+      });
+  }
     const html = `
     <!DOCTYPE html>
     <html lang="en">
@@ -351,6 +434,54 @@ class PremierLeagueBettingAnalyzer {
                 font-size: 0.8em;
                 margin-left: 10px;
             }
+            .ai-insight {
+                background: #f0f8ff;
+                border-left: 4px solid #2196f3;
+                padding: 15px;
+                margin-top: 15px;
+                border-radius: 8px;
+            }
+            .bet-suggestion {
+                color: #e74c3c;
+                font-size: 1.1em;
+                font-weight: bold;
+                margin: 10px 0;
+            }
+            .reasoning {
+                color: #555;
+                line-height: 1.5;
+                font-style: italic;
+            }
+            .date-section {
+                margin-bottom: 30px;
+            }
+            .date-header {
+                color: #2c3e50;
+                font-size: 1.3em;
+                margin-bottom: 15px;
+                padding: 10px;
+                background: #ecf0f1;
+                border-radius: 8px;
+                border-left: 4px solid #3498db;
+            }
+            .fixture-card {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: white;
+                padding: 15px;
+                margin-bottom: 8px;
+                border-radius: 8px;
+                border-left: 3px solid #95a5a6;
+            }
+            .fixture-teams {
+                font-weight: bold;
+                color: #2c3e50;
+            }
+            .fixture-time {
+                color: #7f8c8d;
+                font-size: 0.9em;
+            }
             @media (max-width: 768px) {
                 .odds-grid { grid-template-columns: 1fr; }
                 .stats-grid { grid-template-columns: 1fr; }
@@ -373,10 +504,6 @@ class PremierLeagueBettingAnalyzer {
                     <div class="stat-value">${this.analysis.valueOpportunities.length}</div>
                     <div class="stat-label">Value Opportunities</div>
                 </div>
-                <div class="stat-card">
-                    <div class="stat-value">${Object.keys(this.analysis.bookmakerComparison).length}</div>
-                    <div class="stat-label">Bookmakers Tracked</div>
-                </div>
             </div>
 
             <div class="matches-section">
@@ -392,12 +519,12 @@ class PremierLeagueBettingAnalyzer {
 
             ${this.analysis.valueOpportunities.length > 0 ? `
             <div class="matches-section">
-                <h2 class="section-title">💎 Value Opportunities</h2>
+                <h2 class="section-title">💎 AI Betting Insights</h2>
                 ${this.analysis.valueOpportunities.slice(0, 5).map(match => `
                     <div class="match-card">
                         <div class="match-header">
                             ${match.match}
-                            <span class="value-badge">VALUE</span>
+                            <span class="value-badge">${match.confidence} CONFIDENCE</span>
                         </div>
                         <div class="match-date">
                             ${new Date(match.date).toLocaleDateString('en-GB', { 
@@ -409,63 +536,34 @@ class PremierLeagueBettingAnalyzer {
                                 minute: '2-digit'
                             })}
                         </div>
-                        <div class="odds-grid">
-                            <div class="odds-item">
-                                <div class="odds-team">Home Win</div>
-                                <div class="odds-value">${match.homeOdds}</div>
-                                <div>${match.homeProb}%</div>
-                            </div>
-                            <div class="odds-item">
-                                <div class="odds-team">Draw</div>
-                                <div class="odds-value">${match.drawOdds}</div>
-                                <div>${match.drawProb}%</div>
-                            </div>
-                            <div class="odds-item">
-                                <div class="odds-team">Away Win</div>
-                                <div class="odds-value">${match.awayOdds}</div>
-                                <div>${match.awayProb}%</div>
+                        <div class="ai-insight">
+                            <div class="recommendation">
+                                <h4>🎯 ${match.recommendation}</h4>
+                                <p class="bet-suggestion"><strong>${match.suggestedBet}</strong></p>
+                                <p class="reasoning">${match.reasoning}</p>
                             </div>
                         </div>
-                        <small>Source: ${match.bookmaker}</small>
                     </div>
                 `).join('')}
             </div>
             ` : ''}
 
             <div class="matches-section">
-                <h2 class="section-title">🗓️ Upcoming Matches</h2>
-                ${this.matches.slice(0, 10).map(match => {
-                    const h2hMarket = match.bookmakers?.[0]?.markets?.find(m => m.key === 'h2h');
-                    const outcomes = h2hMarket?.outcomes || [];
-                    
-                    return `
-                    <div class="match-card">
-                        <div class="match-header">${match.home_team} vs ${match.away_team}</div>
-                        <div class="match-date">
-                            ${new Date(match.commence_time).toLocaleDateString('en-GB', { 
-                                weekday: 'long', 
-                                year: 'numeric', 
-                                month: 'long', 
-                                day: 'numeric',
-                                hour: '2-digit',
-                                minute: '2-digit'
-                            })}
-                        </div>
-                        ${outcomes.length > 0 ? `
-                        <div class="odds-grid">
-                            ${outcomes.map(outcome => `
-                                <div class="odds-item">
-                                    <div class="odds-team">${outcome.name}</div>
-                                    <div class="odds-value">${outcome.price}</div>
-                                    <div>${(1 / outcome.price * 100).toFixed(1)}%</div>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <small>Source: ${match.bookmakers[0].title}</small>
-                        ` : '<p><em>Odds not available</em></p>'}
+                <h2 class="section-title">🗓️ Upcoming Fixtures</h2>
+                ${this.groupMatchesByDate().map(dateGroup => `
+                    <div class="date-section">
+                        <h3 class="date-header">${dateGroup.date}</h3>
+                        ${dateGroup.matches.map(match => `
+                            <div class="fixture-card">
+                                <div class="fixture-teams">${match.home_team} vs ${match.away_team}</div>
+                                <div class="fixture-time">${new Date(match.commence_time).toLocaleTimeString('en-GB', { 
+                                    hour: '2-digit', 
+                                    minute: '2-digit' 
+                                })}</div>
+                            </div>
+                        `).join('')}
                     </div>
-                `;
-                }).join('')}
+                `).join('')}
             </div>
 
             <div class="last-updated">
