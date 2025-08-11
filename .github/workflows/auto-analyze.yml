@@ -1,0 +1,34 @@
+name: Auto Fetch and Analyze
+
+on:
+  schedule:
+    - cron: '0 8 * * *'  # every day at 08:00 UTC
+  workflow_dispatch:     # manual trigger available
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '22'
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Run analysis
+      run: npm run analyze
+
+    - name: Commit JSON results
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add ./public/fixtures-latest.json
+        git commit -m "Auto update fixtures JSON"
+        git push
+      continue-on-error: true  # avoid failure if nothing changed
