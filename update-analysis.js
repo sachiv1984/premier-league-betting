@@ -297,6 +297,8 @@ class PremierLeagueBettingAnalyzer {
         return dateA - dateB;
       });
   }
+
+  generateHTML() {
     const html = `
     <!DOCTYPE html>
     <html lang="en">
