@@ -1,11 +1,12 @@
-name: Test API-Football Connection
+name: Test API-Football Fixtures
 
 on:
-  workflow_dispatch:  # Run manually from GitHub Actions tab
+  workflow_dispatch:
 
 jobs:
   test-api:
     runs-on: ubuntu-latest
+
     steps:
       - name: 📥 Checkout repository
         uses: actions/checkout@v4
@@ -16,59 +17,9 @@ jobs:
           node-version: '22'
 
       - name: 📦 Install dependencies
-        run: npm ci
+        run: npm install node-fetch@3
 
-      - name: 🗂 Create public directory if missing
-        run: mkdir -p ./public
-
-      - name: 🧪 Create test script
-        run: |
-          cat > test-api.js <<'EOF'
-          import fs from 'fs';
-          import fetch from 'node-fetch';
-
-          const API_FOOTBALL_KEY = process.env.API_FOOTBALL_KEY;
-          const PREMIER_LEAGUE_ID = 39;
-          const SEASON = 2024; // Current season
-
-          async function main() {
-            const today = new Date().toISOString().split('T')[0];
-            const url = \`https://v3.football.api-sports.io/fixtures?league=\${PREMIER_LEAGUE_ID}&season=\${SEASON}&from=\${today}\`;
-            console.log("Fetching from:", url);
-
-            const res = await fetch(url, {
-              headers: { 'x-apisports-key': API_FOOTBALL_KEY },
-            });
-
-            if (!res.ok) {
-              console.error("❌ API request failed:", res.status, res.statusText);
-              const text = await res.text();
-              console.error("Response:", text);
-              process.exit(1);
-            }
-
-            const json = await res.json();
-            console.log("✅ Response received");
-            console.log(JSON.stringify(json, null, 2));
-
-            // Save to public for live site
-            fs.writeFileSync('./public/upcoming-fixtures.json', JSON.stringify(json, null, 2));
-            console.log("📄 Saved to ./public/upcoming-fixtures.json");
-          }
-
-          main().catch(err => {
-            console.error("Error:", err);
-            process.exit(1);
-          });
-          EOF
-
-      - name: 🚀 Run test script
-        run: node test-api.js
+      - name: 🧪 Run test script
+        run: node test-api-football.js
         env:
           API_FOOTBALL_KEY: ${{ secrets.API_FOOTBALL_KEY }}
-
-      - name: 📤 Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
