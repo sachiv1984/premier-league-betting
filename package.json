@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Free Premier League betting analysis",
   "main": "update-analysis.js",
+  "type": "module",
   "scripts": {
-    "scrape": "node scrape-fixtures.js 1",
     "analyze": "node update-analysis.js",
+    "fetch-and-analyze": "node fetch-and-analyze.js",
     "start": "npm run scrape && npm run analyze",
     "clean": "rm -rf node_modules package-lock.json && npm install"
   },
@@ -23,7 +24,7 @@
     "cheerio": "^1.1.2",
     "node-fetch": "^3.3.2",
     "puppeteer": "^23.0.0",
-    "csv-parse":"^5.4.0"
+    "csv-parse": "^5.4.0"
   },
   "engines": {
     "node": "22.x"
