@@ -2,7 +2,6 @@ import fs from 'fs/promises';
 import path from 'path';
 import { parse as csvParse } from 'csv-parse/sync';
 
-// Parse date from DD/MM/YY
 function parseDate(dateStr) {
   if (!dateStr) return null;
   const [day, month, year] = dateStr.split('/');
@@ -10,7 +9,6 @@ function parseDate(dateStr) {
   return new Date(fullYear, parseInt(month) - 1, parseInt(day));
 }
 
-// Detect PL teams dynamically
 function detectPremierLeagueTeams(records) {
   const teamMatchCounts = {};
   records.forEach(record => {
@@ -19,30 +17,24 @@ function detectPremierLeagueTeams(records) {
       teamMatchCounts[record.AwayTeam] = (teamMatchCounts[record.AwayTeam] || 0) + 1;
     }
   });
-  const premierLeagueTeams = Object.keys(teamMatchCounts)
+  return Object.keys(teamMatchCounts)
     .filter(team => {
       const matchCount = teamMatchCounts[team];
       return matchCount >= 30 && matchCount <= 40;
     })
     .sort();
-  console.log(`Detected ${premierLeagueTeams.length} Premier League teams:`);
-  console.log(premierLeagueTeams.join(', '));
-  return premierLeagueTeams;
 }
 
-// Check if match is PL
 function isPremierLeagueMatch(homeTeam, awayTeam, premierLeagueTeams) {
   return premierLeagueTeams.includes(homeTeam) && premierLeagueTeams.includes(awayTeam);
 }
 
-// Calculate gameweek
 function calculateGameweek(matchDate, seasonStartDate) {
   if (!matchDate || !seasonStartDate) return 1;
   const daysDiff = Math.floor((matchDate - seasonStartDate) / (1000 * 60 * 60 * 24));
   return Math.max(1, Math.min(38, Math.floor(daysDiff / 7) + 1));
 }
 
-// Match status
 function getMatchStatus(matchDate, homeGoals, awayGoals) {
   const now = new Date();
   const matchTime = new Date(matchDate);
@@ -53,11 +45,12 @@ function getMatchStatus(matchDate, homeGoals, awayGoals) {
   if (matchTime < twoHoursAgo && matchTime > new Date(now.getTime() - (24 * 60 * 60 * 1000))) {
     return 'ongoing';
   }
-  if (matchTime < now) return 'postponed';
+  if (matchTime < now) {
+    return 'postponed';
+  }
   return 'upcoming';
 }
 
-// Format match
 function formatMatch(fixture) {
   const status = getMatchStatus(fixture.Date, fixture.FTHG, fixture.FTAG);
   const matchDate = parseDate(fixture.Date);
@@ -78,7 +71,6 @@ function formatMatch(fixture) {
   };
 }
 
-// Gameweek complete?
 function isGameweekComplete(fixtures) {
   return fixtures.every(fixture => {
     const status = getMatchStatus(fixture.Date, fixture.FTHG, fixture.FTAG);
@@ -86,7 +78,6 @@ function isGameweekComplete(fixtures) {
   });
 }
 
-// Get current gameweek
 function getCurrentGameweek(fixturesByGameweek) {
   for (let gw = 1; gw <= 38; gw++) {
     const fixtures = fixturesByGameweek[gw] || [];
@@ -99,22 +90,19 @@ function getCurrentGameweek(fixturesByGameweek) {
 
 async function main() {
   try {
+    await fs.mkdir('./public', { recursive: true }); // Always create public folder
+
     const requestedGameweek = process.argv[2] ? Number(process.argv[2]) : null;
     const csvPath = path.resolve('./data/fixtures.csv');
     const csvData = await fs.readFile(csvPath, 'utf-8');
 
-    console.log('Parsing CSV...');
     const records = csvParse(csvData, {
       columns: true,
       skip_empty_lines: true,
     });
 
-    console.log(`Loaded ${records.length} total records`);
-
-    // Detect PL teams before filtering
     const premierLeagueTeams = detectPremierLeagueTeams(records);
 
-    // Create validRecords BEFORE referencing
     const validRecords = records
       .filter(record =>
         record.Date &&
@@ -129,16 +117,11 @@ async function main() {
       .filter(record => record.parsedDate)
       .sort((a, b) => a.parsedDate - b.parsedDate);
 
-    console.log(`Found ${validRecords.length} Premier League fixtures`);
-
     if (validRecords.length === 0) {
       console.error('No valid fixture records found');
-      return;
     }
 
-    const seasonStart = validRecords[0].parsedDate;
-    console.log(`Season start detected: ${seasonStart.toLocaleDateString('en-GB')}`);
-
+    const seasonStart = validRecords.length ? validRecords[0].parsedDate : new Date();
     const fixturesWithGameweeks = validRecords.map(record => ({
       ...record,
       gameweek: calculateGameweek(record.parsedDate, seasonStart)
@@ -146,59 +129,28 @@ async function main() {
 
     const fixturesByGameweek = {};
     fixturesWithGameweeks.forEach(fixture => {
-      if (!fixturesByGameweek[fixture.gameweek]) fixturesByGameweek[fixture.gameweek] = [];
+      if (!fixturesByGameweek[fixture.gameweek]) {
+        fixturesByGameweek[fixture.gameweek] = [];
+      }
       fixturesByGameweek[fixture.gameweek].push(fixture);
     });
 
     const targetGameweek = requestedGameweek || getCurrentGameweek(fixturesByGameweek);
     const fixtures = fixturesByGameweek[targetGameweek] || [];
-
-    if (!fixtures.length) {
-      console.warn(`No fixtures found for gameweek ${targetGameweek}`);
-      return;
-    }
-
-    console.log(`\n=== PREMIER LEAGUE GAMEWEEK ${targetGameweek} ===`);
-    console.log(`Found ${fixtures.length} fixtures\n`);
-
     const formattedFixtures = fixtures.map(formatMatch);
-    const isComplete = isGameweekComplete(fixtures);
+    const isComplete = fixtures.length ? isGameweekComplete(fixtures) : false;
 
-    console.log(`Status: ${isComplete ? 'COMPLETE' : 'IN PROGRESS'}`);
-    console.log('─'.repeat(60));
-
-    formattedFixtures.forEach(match => {
-      const statusEmoji = {
-        'completed': '✓',
-        'ongoing': '🔴',
-        'upcoming': '⏰',
-        'postponed': '⚠️'
-      }[match.status] || '';
-      console.log(`${statusEmoji} ${match.homeTeam} vs ${match.awayTeam}`);
-      console.log(`   ${match.score} | ${match.date}`);
-      console.log('');
-    });
-
-    // Save JSON output
+    // Save JSON data for API use
     const jsonOutput = {
       gameweek: targetGameweek,
       isComplete: isComplete,
       fixtures: formattedFixtures,
       lastUpdated: new Date().toISOString()
     };
-
-    await fs.mkdir('./public', { recursive: true });
     const jsonOutputPath = path.resolve(`./public/gameweek-${targetGameweek}.json`);
     await fs.writeFile(jsonOutputPath, JSON.stringify(jsonOutput, null, 2));
-    console.log(`Saved gameweek data to ${jsonOutputPath}`);
 
-    // Generate HTML
-    const htmlOutputPath = path.resolve(`./public/gameweek-${targetGameweek}.html`);
-    const htmlContent = generateGameweekHTML(targetGameweek, isComplete, formattedFixtures);
-    await fs.writeFile(htmlOutputPath, htmlContent);
-    console.log(`Saved HTML display to ${htmlOutputPath}`);
-
-    // Generate all GWs + index
+    // Always generate HTML pages & index
     await generateAllGameweekPages(fixturesByGameweek);
     await generateMainIndex(fixturesByGameweek);
 
@@ -208,69 +160,69 @@ async function main() {
   }
 }
 
-// HTML for a single GW
-function generateGameweekHTML(gw, isComplete, fixtures) {
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Premier League Gameweek ${gw}</title>
-<style>
-/* styles here – same as your original */
-</style>
-</head>
-<body>
-<div class="container">
-<h1>Premier League Gameweek ${gw}</h1>
-<div class="status ${isComplete ? 'complete' : 'in-progress'}">
-${isComplete ? '✓ Gameweek Complete' : '⏳ Gameweek In Progress'}
-</div>
-${fixtures.map(match => `
-<div class="fixture">
-  <div>${match.homeTeam} vs ${match.awayTeam}</div>
-  <div>${match.score}</div>
-  <div>${match.date}</div>
-</div>`).join('')}
-</div>
-</body>
-</html>`;
-}
-
-// Generate index
 async function generateMainIndex(fixturesByGameweek) {
   const gameweeks = Object.keys(fixturesByGameweek).map(Number).sort((a, b) => a - b);
   const currentGW = getCurrentGameweek(fixturesByGameweek);
-  const htmlOutputPath = path.resolve('./public/index.html');
-  const htmlContent = `<!DOCTYPE html>
-<html lang="en">
-<head><meta charset="UTF-8"><title>Premier League Fixtures</title></head>
-<body>
-<h1>Premier League Fixtures</h1>
-<div class="gameweeks">
-${gameweeks.map(gw => {
-  const fixtures = fixturesByGameweek[gw] || [];
-  const isComplete = isGameweekComplete(fixtures);
-  const isCurrent = gw === currentGW;
-  return `<a href="./gameweek-${gw}.html">${gw} ${isComplete ? '✓' : isCurrent ? '⏳' : '⏰'}</a>`;
-}).join('<br>')}
-</div>
-</body></html>`;
-  await fs.writeFile(htmlOutputPath, htmlContent);
-  console.log('Generated main index at ./public/index.html');
+
+  const gwLinks = gameweeks.map(gw => {
+    return `<li><a href="gameweek-${gw}.html">Gameweek ${gw}</a></li>`;
+  }).join('\n');
+
+  const htmlContent = `
+  <html>
+  <head>
+    <title>Premier League Fixtures</title>
+    <style>
+      body { font-family: Arial; margin: 20px; }
+      h1 { color: #333; }
+      ul { line-height: 1.8; }
+    </style>
+  </head>
+  <body>
+    <h1>Premier League Fixtures</h1>
+    <h2>Current Gameweek: ${currentGW}</h2>
+    <ul>
+      ${gwLinks}
+    </ul>
+  </body>
+  </html>
+  `;
+
+  await fs.writeFile('./public/index.html', htmlContent);
 }
 
-// Generate all gameweeks
 async function generateAllGameweekPages(fixturesByGameweek) {
   const gameweeks = Object.keys(fixturesByGameweek).map(Number).sort((a, b) => a - b);
   for (const gw of gameweeks) {
     const fixtures = fixturesByGameweek[gw] || [];
-    if (!fixtures.length) continue;
-    const htmlOutputPath = path.resolve(`./public/gameweek-${gw}.html`);
-    const htmlContent = generateGameweekHTML(gw, isGameweekComplete(fixtures), fixtures.map(formatMatch));
-    await fs.writeFile(htmlOutputPath, htmlContent);
+    const formattedFixtures = fixtures.map(formatMatch);
+
+    const matchesHtml = formattedFixtures.map(match => {
+      return `<li>${match.homeTeam} vs ${match.awayTeam} - ${match.score} (${match.status})</li>`;
+    }).join('\n');
+
+    const htmlContent = `
+    <html>
+    <head>
+      <title>Gameweek ${gw} Fixtures</title>
+      <style>
+        body { font-family: Arial; margin: 20px; }
+        h1 { color: #333; }
+        ul { line-height: 1.8; }
+      </style>
+    </head>
+    <body>
+      <h1>Gameweek ${gw}</h1>
+      <ul>
+        ${matchesHtml || '<li>No fixtures found.</li>'}
+      </ul>
+      <p><a href="index.html">Back to Index</a></p>
+    </body>
+    </html>
+    `;
+
+    await fs.writeFile(`./public/gameweek-${gw}.html`, htmlContent);
   }
-  console.log(`Generated HTML files for ${gameweeks.length} gameweeks`);
 }
 
 main();
