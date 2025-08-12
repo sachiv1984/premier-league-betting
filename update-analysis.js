@@ -183,6 +183,49 @@ async function main() {
       console.log('');
     });
     
+    // Save JSON output for web display
+    const jsonOutput = {
+      gameweek: targetGameweek,
+      isComplete: isComplete,
+      fixtures: formattedFixtures,
+      lastUpdated: new Date().toISOString()
+    };
+    
+    await fs.mkdir('./public', { recursive: true });
+    const jsonOutputPath = path.resolve(`./public/gameweek-${targetGameweek}.json`);
+    await fs.writeFile(jsonOutputPath, JSON.stringify(jsonOutput, null, 2));
+    console.log(`\nSaved gameweek data to ${jsonOutputPath}`);
+    
+    // Generate HTML display
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Premier League Gameweek ${targetGameweek}</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+          }
+          h1 {
+            color: #461E96;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Premier League Gameweek ${targetGameweek}</h1>
+        <ul>
+          ${formattedFixtures.map(match => `<li>${match.homeTeam} vs ${match.awayTeam} - ${match.score}</li>`).join('')}
+        </ul>
+      </body>
+      </html>
+    `;
+    
+    const htmlOutputPath = path.resolve(`./public/gameweek-${targetGameweek}.html`);
+    await fs.writeFile(htmlOutputPath, htmlContent);
+    console.log(`Saved HTML display to ${htmlOutputPath}`);
+    
   } catch (err) {
     console.error('Error during analysis:', err);
     process.exit(1);
@@ -190,3 +233,4 @@ async function main() {
 }
 
 main();
+
