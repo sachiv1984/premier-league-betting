@@ -14,9 +14,14 @@ async function downloadCSV(url, retries = 5, delay = 10000) {
 
     https.get(url, options, (res) => {
       if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        // Handle redirection
-        console.warn(`Redirected to ${res.headers.location}`);
-        resolve(downloadCSV(res.headers.location, retries, delay));
+        // Log the redirection URL for debugging
+        console.warn(`Redirected to: ${res.headers.location}`);
+
+        // Handle relative redirection URLs
+        const redirectUrl = new URL(res.headers.location, url).href;
+        console.warn(`Resolved redirect URL: ${redirectUrl}`);
+
+        resolve(downloadCSV(redirectUrl, retries, delay));
         return;
       }
 
