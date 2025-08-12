@@ -4,9 +4,15 @@ import { parse } from 'csv-parse/sync';
 
 const CSV_URL = 'https://www.football-data.co.uk/mmz4281/2526/E0.csv';
 
-async function downloadCSV(url, retries = 3, delay = 5000) {
+async function downloadCSV(url, retries = 5, delay = 10000) {
   return new Promise((resolve, reject) => {
-    https.get(url, (res) => {
+    const options = {
+      headers: {
+        'User-Agent': 'PremierLeagueBettingBot/1.0 (https://github.com/sachiv1984)',
+      },
+    };
+
+    https.get(url, options, (res) => {
       if (res.statusCode === 429 && retries > 0) {
         console.warn(`Rate limited. Retrying in ${delay / 1000} seconds...`);
         setTimeout(() => {
