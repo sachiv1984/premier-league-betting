@@ -1,123 +1,496 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { parse as csvParse } from 'csv-parse/sync'; // Corrected import
+import { parse as csvParse } from 'csv-parse/sync';
+
+// Function to parse date from DD/MM/YY format
+function parseDate(dateStr) {
+  if (!dateStr) return null;
+  const [day, month, year] = dateStr.split('/');
+  const fullYear = parseInt(year) < 50 ? 2000 + parseInt(year) : 1900 + parseInt(year);
+  return new Date(fullYear, parseInt(month) - 1, parseInt(day));
+}
+
+// Function to determine gameweek based on Premier League scheduling
+function calculateGameweek(matchDate, seasonStartDate) {
+  if (!matchDate || !seasonStartDate) return 1;
+  
+  const timeDiff = matchDate - seasonStartDate;
+  const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+  
+  // Premier League typically has matches every 7-10 days
+  // We'll use 7-day intervals as base, with some flexibility
+  let gameweek = Math.floor(daysDiff / 7) + 1;
+  
+  // Ensure gameweek is between 1 and 38 (Premier League has 38 gameweeks)
+  return Math.max(1, Math.min(38, gameweek));
+}
+
+// Function to determine if a match is completed, ongoing, or upcoming
+function getMatchStatus(matchDate, homeGoals, awayGoals) {
+  const now = new Date();
+  const matchTime = new Date(matchDate);
+  
+  // If we have scores, the match is completed
+  if (homeGoals !== '' && awayGoals !== '' && !isNaN(homeGoals) && !isNaN(awayGoals)) {
+    return 'completed';
+  }
+  
+  // If match was scheduled to start more than 2 hours ago but no score, might be ongoing
+  const twoHoursAgo = new Date(now.getTime() - (2 * 60 * 60 * 1000));
+  if (matchTime < twoHoursAgo && matchTime > new Date(now.getTime() - (24 * 60 * 60 * 1000))) {
+    return 'ongoing';
+  }
+  
+  // If match is in the past but no score, treat as postponed/cancelled
+  if (matchTime < now) {
+    return 'postponed';
+  }
+  
+  return 'upcoming';
+}
+
+// Function to format match display
+function formatMatch(fixture) {
+  const status = getMatchStatus(fixture.Date, fixture.FTHG, fixture.FTAG);
+  const matchDate = parseDate(fixture.Date);
+  const timeStr = fixture.Time || 'TBD';
+  
+  let scoreDisplay = '';
+  if (status === 'completed') {
+    scoreDisplay = `${fixture.FTHG} - ${fixture.FTAG}`;
+  } else if (status === 'ongoing') {
+    scoreDisplay = `${fixture.FTHG || 0} - ${fixture.FTAG || 0} (LIVE)`;
+  } else if (status === 'postponed') {
+    scoreDisplay = 'POSTPONED';
+  } else {
+    scoreDisplay = `${timeStr}`;
+  }
+  
+  return {
+    homeTeam: fixture.HomeTeam,
+    awayTeam: fixture.AwayTeam,
+    score: scoreDisplay,
+    date: matchDate ? matchDate.toLocaleDateString('en-GB') : fixture.Date,
+    time: timeStr,
+    status: status,
+    gameweek: fixture.gameweek
+  };
+}
+
+// Function to check if a gameweek is complete
+function isGameweekComplete(fixtures) {
+  return fixtures.every(fixture => {
+    const status = getMatchStatus(fixture.Date, fixture.FTHG, fixture.FTAG);
+    return status === 'completed' || status === 'postponed';
+  });
+}
+
+// Function to get current gameweek (first incomplete gameweek)
+function getCurrentGameweek(fixturesByGameweek) {
+  for (let gw = 1; gw <= 38; gw++) {
+    const fixtures = fixturesByGameweek[gw] || [];
+    if (fixtures.length > 0 && !isGameweekComplete(fixtures)) {
+      return gw;
+    }
+  }
+  return 1; // Fallback to gameweek 1
+}
 
 async function main() {
   try {
-    const matchweek = process.argv[2] ? Number(process.argv[2]) : 1;
+    // Allow manual gameweek selection or auto-detect current gameweek
+    const requestedGameweek = process.argv[2] ? Number(process.argv[2]) : null;
     const csvPath = path.resolve('./data/fixtures.csv');
     const csvData = await fs.readFile(csvPath, 'utf-8');
-
-    // Parse CSV
+    
+    console.log('Parsing CSV...');
     const records = csvParse(csvData, {
       columns: true,
       skip_empty_lines: true,
     });
-
-    // Filter records for this matchweek (assuming a 'matchweek' column)
-    const fixtures = records.filter(f => Number(f.matchweek) === matchweek);
-
-    if (!fixtures.length) {
-      console.warn(`No fixtures found for matchweek ${matchweek}`);
-    } else {
-      console.log(`Loaded ${fixtures.length} fixtures for Matchweek ${matchweek}`);
+    
+    console.log(`Loaded ${records.length} total records`);
+    
+    // Filter out records without proper dates and sort by date
+    const validRecords = records
+      .filter(record => record.Date && record.HomeTeam && record.AwayTeam)
+      .map(record => ({
+        ...record,
+        parsedDate: parseDate(record.Date)
+      }))
+      .filter(record => record.parsedDate)
+      .sort((a, b) => a.parsedDate - b.parsedDate);
+    
+    if (validRecords.length === 0) {
+      console.error('No valid fixture records found');
+      return;
     }
-
-    // Save fixtures for the current matchweek
-    const jsonOutputPath = path.resolve(`./public/fixtures-matchweek-${matchweek}.json`);
-    await fs.writeFile(jsonOutputPath, JSON.stringify(fixtures, null, 2), 'utf-8');
-    console.log(`Saved fixtures JSON to ${jsonOutputPath}`);
-
-    // Generate index file
-    console.log('Generating index file...');
-    const matchweeks = [...new Set(records.map(f => Number(f.matchweek)))].sort((a, b) => a - b);
-    const index = matchweeks.map(week => ({
-      matchweek: week,
-      fixtureCount: records.filter(f => Number(f.matchweek) === week).length,
+    
+    // Determine season start (first match date)
+    const seasonStart = validRecords[0].parsedDate;
+    console.log(`Season start detected: ${seasonStart.toLocaleDateString('en-GB')}`);
+    
+    // Calculate gameweeks for all fixtures
+    const fixturesWithGameweeks = validRecords.map(record => ({
+      ...record,
+      gameweek: calculateGameweek(record.parsedDate, seasonStart)
     }));
-
-    // Generate HTML content
+    
+    // Group fixtures by gameweek
+    const fixturesByGameweek = {};
+    fixturesWithGameweeks.forEach(fixture => {
+      const gw = fixture.gameweek;
+      if (!fixturesByGameweek[gw]) {
+        fixturesByGameweek[gw] = [];
+      }
+      fixturesByGameweek[gw].push(fixture);
+    });
+    
+    // Determine which gameweek to display
+    const targetGameweek = requestedGameweek || getCurrentGameweek(fixturesByGameweek);
+    const fixtures = fixturesByGameweek[targetGameweek] || [];
+    
+    if (!fixtures.length) {
+      console.warn(`No fixtures found for gameweek ${targetGameweek}`);
+      return;
+    }
+    
+    console.log(`\n=== PREMIER LEAGUE GAMEWEEK ${targetGameweek} ===`);
+    console.log(`Found ${fixtures.length} fixtures\n`);
+    
+    const formattedFixtures = fixtures.map(formatMatch);
+    const isComplete = isGameweekComplete(fixtures);
+    
+    console.log(`Status: ${isComplete ? 'COMPLETE' : 'IN PROGRESS'}`);
+    console.log('─'.repeat(60));
+    
+    // Display fixtures
+    formattedFixtures.forEach(match => {
+      const statusEmoji = {
+        'completed': '✓',
+        'ongoing': '🔴',
+        'upcoming': '⏰',
+        'postponed': '⚠️'
+      }[match.status] || '';
+      
+      console.log(`${statusEmoji} ${match.homeTeam} vs ${match.awayTeam}`);
+      console.log(`   ${match.score} | ${match.date}`);
+      console.log('');
+    });
+    
+    // Save JSON output for web display
+    const jsonOutput = {
+      gameweek: targetGameweek,
+      isComplete: isComplete,
+      fixtures: formattedFixtures,
+      lastUpdated: new Date().toISOString()
+    };
+    
+    await fs.mkdir('./public', { recursive: true });
+    const jsonOutputPath = path.resolve(`./public/gameweek-${targetGameweek}.json`);
+    await fs.writeFile(jsonOutputPath, JSON.stringify(jsonOutput, null, 2));
+    console.log(`\nSaved gameweek data to ${jsonOutputPath}`);
+    
+    // Generate HTML display
     const htmlContent = `
       <!DOCTYPE html>
       <html lang="en">
       <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Fixtures Index</title>
+        <title>Premier League Gameweek ${targetGameweek}</title>
         <style>
           body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+          }
+          .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
           }
           h1 {
-            color: #461E96;
+            color: #38003c;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
           }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
+          .status {
+            text-align: center;
+            font-size: 1.2em;
+            margin-bottom: 30px;
+            padding: 10px;
+            border-radius: 8px;
+            font-weight: bold;
           }
-          th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
+          .status.complete {
+            background: #e8f5e8;
+            color: #2d5a2d;
           }
-          th {
-            background-color: #00B4E6;
+          .status.in-progress {
+            background: #fff3cd;
+            color: #856404;
+          }
+          .fixture {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            background: #f8f9fa;
+            border-left: 5px solid #38003c;
+            transition: transform 0.2s;
+          }
+          .fixture:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+          }
+          .teams {
+            flex: 1;
+            font-size: 1.1em;
+            font-weight: 600;
+          }
+          .score {
+            flex: 0 0 auto;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #38003c;
+            text-align: center;
+            min-width: 120px;
+          }
+          .score.live {
+            color: #dc3545;
+            animation: pulse 2s infinite;
+          }
+          .date-time {
+            flex: 0 0 auto;
+            color: #6c757d;
+            font-size: 0.9em;
+            text-align: right;
+            min-width: 100px;
+          }
+          .status-indicator {
+            font-size: 1.2em;
+            margin-right: 10px;
+          }
+          @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+          }
+          .last-updated {
+            text-align: center;
+            color: #6c757d;
+            font-size: 0.9em;
+            margin-top: 30px;
+            font-style: italic;
+          }
+          .navigation {
+            text-align: center;
+            margin-bottom: 20px;
+          }
+          .nav-btn {
+            background: #38003c;
             color: white;
-          }
-          tr:nth-child(even) {
-            background-color: #f2f2f2;
-          }
-          a {
-            color: #461E96;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 5px;
+            cursor: pointer;
             text-decoration: none;
+            display: inline-block;
           }
-          a:hover {
-            text-decoration: underline;
+          .nav-btn:hover {
+            background: #2c0029;
           }
         </style>
+        <script>
+          // Auto-refresh every 5 minutes for live matches
+          setTimeout(() => location.reload(), 5 * 60 * 1000);
+        </script>
       </head>
       <body>
-        <h1>Fixtures Index</h1>
-        <p>Below is a summary of all matchweeks and their corresponding fixture counts. Click on a matchweek to view its fixtures.</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Matchweek</th>
-              <th>Fixture Count</th>
-              <th>Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${index
-              .map(
-                ({ matchweek, fixtureCount }) => `
-              <tr>
-                <td>${matchweek}</td>
-                <td>${fixtureCount}</td>
-                <td><a href="./fixtures-matchweek-${matchweek}.json" target="_blank">View Fixtures</a></td>
-              </tr>
-            `
-              )
-              .join('')}
-          </tbody>
-        </table>
+        <div class="container">
+          <h1>Premier League Gameweek ${targetGameweek}</h1>
+          
+          <div class="navigation">
+            ${targetGameweek > 1 ? `<a href="./gameweek-${targetGameweek - 1}.html" class="nav-btn">← GW ${targetGameweek - 1}</a>` : ''}
+            <a href="./index.html" class="nav-btn">All Gameweeks</a>
+            ${targetGameweek < 38 ? `<a href="./gameweek-${targetGameweek + 1}.html" class="nav-btn">GW ${targetGameweek + 1} →</a>` : ''}
+          </div>
+          
+          <div class="status ${isComplete ? 'complete' : 'in-progress'}">
+            ${isComplete ? '✓ Gameweek Complete' : '⏳ Gameweek In Progress'}
+          </div>
+          
+          ${formattedFixtures.map(match => `
+            <div class="fixture">
+              <div class="status-indicator">
+                ${match.status === 'completed' ? '✓' : 
+                  match.status === 'ongoing' ? '🔴' : 
+                  match.status === 'postponed' ? '⚠️' : '⏰'}
+              </div>
+              <div class="teams">
+                ${match.homeTeam} vs ${match.awayTeam}
+              </div>
+              <div class="score ${match.status === 'ongoing' ? 'live' : ''}">
+                ${match.score}
+              </div>
+              <div class="date-time">
+                ${match.date}
+              </div>
+            </div>
+          `).join('')}
+          
+          <div class="last-updated">
+            Last updated: ${new Date().toLocaleString('en-GB')}
+          </div>
+        </div>
       </body>
       </html>
     `;
-
-    const htmlOutputPath = path.resolve('./public/index.html');
-    await fs.writeFile(htmlOutputPath, htmlContent, 'utf-8');
-    console.log(`Saved HTML index to ${htmlOutputPath}`);
-
-    // TODO: Add your betting analysis logic here using fixtures array
-
+    
+    const htmlOutputPath = path.resolve(`./public/gameweek-${targetGameweek}.html`);
+    await fs.writeFile(htmlOutputPath, htmlContent);
+    console.log(`Saved HTML display to ${htmlOutputPath}`);
+    
+    // Generate or update main index
+    await generateMainIndex(fixturesByGameweek);
+    
   } catch (err) {
     console.error('Error during analysis:', err);
     process.exit(1);
   }
+}
+
+async function generateMainIndex(fixturesByGameweek) {
+  const gameweeks = Object.keys(fixturesByGameweek)
+    .map(Number)
+    .sort((a, b) => a - b);
+  
+  const currentGW = getCurrentGameweek(fixturesByGameweek);
+  
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Premier League Fixtures</title>
+      <style>
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          margin: 0;
+          padding: 20px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          min-height: 100vh;
+        }
+        .container {
+          max-width: 1000px;
+          margin: 0 auto;
+          background: white;
+          border-radius: 15px;
+          padding: 30px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+          color: #38003c;
+          text-align: center;
+          margin-bottom: 30px;
+          font-size: 2.5em;
+        }
+        .gameweeks {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 15px;
+          margin-top: 20px;
+        }
+        .gameweek-card {
+          background: #f8f9fa;
+          border-radius: 10px;
+          padding: 20px;
+          text-align: center;
+          text-decoration: none;
+          color: #333;
+          transition: all 0.3s;
+          border: 3px solid transparent;
+        }
+        .gameweek-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .gameweek-card.current {
+          border-color: #38003c;
+          background: linear-gradient(135deg, #38003c, #2c0029);
+          color: white;
+        }
+        .gameweek-card.complete {
+          background: #e8f5e8;
+        }
+        .gameweek-number {
+          font-size: 1.5em;
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+        .gameweek-status {
+          font-size: 0.9em;
+          opacity: 0.8;
+        }
+        .current-indicator {
+          background: #dc3545;
+          color: white;
+          padding: 5px 10px;
+          border-radius: 15px;
+          font-size: 0.8em;
+          margin-top: 10px;
+          display: inline-block;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>Premier League 2025/26 Season</h1>
+        <p style="text-align: center; color: #6c757d; font-size: 1.1em;">
+          Click on any gameweek to view fixtures and results
+        </p>
+        
+        <div class="gameweeks">
+          ${gameweeks.map(gw => {
+            const fixtures = fixturesByGameweek[gw] || [];
+            const isComplete = isGameweekComplete(fixtures);
+            const isCurrent = gw === currentGW;
+            
+            return `
+              <a href="./gameweek-${gw}.html" class="gameweek-card ${isCurrent ? 'current' : ''} ${isComplete ? 'complete' : ''}">
+                <div class="gameweek-number">Gameweek ${gw}</div>
+                <div class="gameweek-status">
+                  ${fixtures.length} fixtures
+                  ${isComplete ? '✓' : isCurrent ? '⏳' : '⏰'}
+                </div>
+                ${isCurrent ? '<div class="current-indicator">CURRENT</div>' : ''}
+              </a>
+            `;
+          }).join('')}
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; color: #6c757d; font-style: italic;">
+          Last updated: ${new Date().toLocaleString('en-GB')}
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+  
+  const htmlOutputPath = path.resolve('./public/index.html');
+  await fs.writeFile(htmlOutputPath, htmlContent);
+  console.log('Generated main index at ./public/index.html');
 }
 
 main();
