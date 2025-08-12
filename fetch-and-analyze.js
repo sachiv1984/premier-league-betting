@@ -13,6 +13,13 @@ async function downloadCSV(url, retries = 5, delay = 10000) {
     };
 
     https.get(url, options, (res) => {
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        // Handle redirection
+        console.warn(`Redirected to ${res.headers.location}`);
+        resolve(downloadCSV(res.headers.location, retries, delay));
+        return;
+      }
+
       if (res.statusCode === 429 && retries > 0) {
         console.warn(`Rate limited. Retrying in ${delay / 1000} seconds...`);
         setTimeout(() => {
