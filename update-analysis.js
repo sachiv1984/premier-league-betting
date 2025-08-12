@@ -23,7 +23,7 @@ async function main() {
       console.log(`Loaded ${fixtures.length} fixtures for Matchweek ${matchweek}`);
     }
 
-    // Example: convert fixtures to simplified JSON format and save
+    // Save fixtures for the current matchweek
     const jsonOutputPath = path.resolve(`./public/fixtures-matchweek-${matchweek}.json`);
     await fs.writeFile(jsonOutputPath, JSON.stringify(fixtures, null, 2), 'utf-8');
     console.log(`Saved fixtures JSON to ${jsonOutputPath}`);
@@ -32,6 +32,18 @@ async function main() {
     fixtures.forEach(fixture => {
       console.log(`${fixture.homeTeam} vs ${fixture.awayTeam} — Status: ${fixture.status || '-'} — Score: ${fixture.scoreHome || '-'} : ${fixture.scoreAway || '-'}`);
     });
+
+    // Generate index file
+    console.log('Generating index file...');
+    const matchweeks = [...new Set(records.map(f => Number(f.matchweek)))].sort((a, b) => a - b);
+    const index = matchweeks.map(week => ({
+      matchweek: week,
+      fixtureCount: records.filter(f => Number(f.matchweek) === week).length,
+    }));
+
+    const indexOutputPath = path.resolve('./public/fixtures-index.json');
+    await fs.writeFile(indexOutputPath, JSON.stringify(index, null, 2), 'utf-8');
+    console.log(`Saved index JSON to ${indexOutputPath}`);
 
     // TODO: Add your betting analysis logic here using fixtures array
 
