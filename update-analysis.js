@@ -28,11 +28,6 @@ async function main() {
     await fs.writeFile(jsonOutputPath, JSON.stringify(fixtures, null, 2), 'utf-8');
     console.log(`Saved fixtures JSON to ${jsonOutputPath}`);
 
-    // Example usage: print fixtures summary
-    fixtures.forEach(fixture => {
-      console.log(`${fixture.homeTeam} vs ${fixture.awayTeam} — Status: ${fixture.status || '-'} — Score: ${fixture.scoreHome || '-'} : ${fixture.scoreAway || '-'}`);
-    });
-
     // Generate index file
     console.log('Generating index file...');
     const matchweeks = [...new Set(records.map(f => Number(f.matchweek)))].sort((a, b) => a - b);
@@ -41,9 +36,81 @@ async function main() {
       fixtureCount: records.filter(f => Number(f.matchweek) === week).length,
     }));
 
-    const indexOutputPath = path.resolve('./public/fixtures-index.json');
-    await fs.writeFile(indexOutputPath, JSON.stringify(index, null, 2), 'utf-8');
-    console.log(`Saved index JSON to ${indexOutputPath}`);
+    // Generate HTML content
+    const htmlContent = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Fixtures Index</title>
+        <style>
+          body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+          }
+          h1 {
+            color: #461E96;
+          }
+          table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+          }
+          th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+          }
+          th {
+            background-color: #00B4E6;
+            color: white;
+          }
+          tr:nth-child(even) {
+            background-color: #f2f2f2;
+          }
+          a {
+            color: #461E96;
+            text-decoration: none;
+          }
+          a:hover {
+            text-decoration: underline;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>Fixtures Index</h1>
+        <p>Below is a summary of all matchweeks and their corresponding fixture counts. Click on a matchweek to view its fixtures.</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Matchweek</th>
+              <th>Fixture Count</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${index
+              .map(
+                ({ matchweek, fixtureCount }) => `
+              <tr>
+                <td>${matchweek}</td>
+                <td>${fixtureCount}</td>
+                <td><a href="./fixtures-matchweek-${matchweek}.json" target="_blank">View Fixtures</a></td>
+              </tr>
+            `
+              )
+              .join('')}
+          </tbody>
+        </table>
+      </body>
+      </html>
+    `;
+
+    const htmlOutputPath = path.resolve('./public/index.html');
+    await fs.writeFile(htmlOutputPath, htmlContent, 'utf-8');
+    console.log(`Saved HTML index to ${htmlOutputPath}`);
 
     // TODO: Add your betting analysis logic here using fixtures array
 
