@@ -1,66 +1,113 @@
 
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Fixtures Index</title>
-        <style>
-          body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            padding: 0;
-          }
-          h1 {
-            color: #461E96;
-          }
-          table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-          }
-          th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-          }
-          th {
-            background-color: #00B4E6;
-            color: white;
-          }
-          tr:nth-child(even) {
-            background-color: #f2f2f2;
-          }
-          a {
-            color: #461E96;
-            text-decoration: none;
-          }
-          a:hover {
-            text-decoration: underline;
-          }
-        </style>
-      </head>
-      <body>
-        <h1>Fixtures Index</h1>
-        <p>Below is a summary of all matchweeks and their corresponding fixture counts. Click on a matchweek to view its fixtures.</p>
-        <table>
-          <thead>
-            <tr>
-              <th>Matchweek</th>
-              <th>Fixture Count</th>
-              <th>Details</th>
-            </tr>
-          </thead>
-          <tbody>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Premier League Fixtures</title>
+      <style>
+        body {
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          margin: 0;
+          padding: 20px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          min-height: 100vh;
+        }
+        .container {
+          max-width: 1000px;
+          margin: 0 auto;
+          background: white;
+          border-radius: 15px;
+          padding: 30px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 {
+          color: #38003c;
+          text-align: center;
+          margin-bottom: 30px;
+          font-size: 2.5em;
+        }
+        .gameweeks {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+          gap: 15px;
+          margin-top: 20px;
+        }
+        .gameweek-card {
+          background: #f8f9fa;
+          border-radius: 10px;
+          padding: 20px;
+          text-align: center;
+          text-decoration: none;
+          color: #333;
+          transition: all 0.3s;
+          border: 3px solid transparent;
+        }
+        .gameweek-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .gameweek-card.current {
+          border-color: #38003c;
+          background: linear-gradient(135deg, #38003c, #2c0029);
+          color: white;
+        }
+        .gameweek-card.complete {
+          background: #e8f5e8;
+        }
+        .gameweek-number {
+          font-size: 1.5em;
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+        .gameweek-status {
+          font-size: 0.9em;
+          opacity: 0.8;
+        }
+        .current-indicator {
+          background: #dc3545;
+          color: white;
+          padding: 5px 10px;
+          border-radius: 15px;
+          font-size: 0.8em;
+          margin-top: 10px;
+          display: inline-block;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <h1>Premier League 2025/26 Season</h1>
+        <p style="text-align: center; color: #6c757d; font-size: 1.1em;">
+          Click on any gameweek to view fixtures and results
+        </p>
+        
+        <div class="gameweeks">
+          
+              <a href="./gameweek-1.html" class="gameweek-card current complete">
+                <div class="gameweek-number">Gameweek 1</div>
+                <div class="gameweek-status">
+                  12 fixtures
+                  ✓
+                </div>
+                <div class="current-indicator">CURRENT</div>
+              </a>
             
-              <tr>
-                <td>NaN</td>
-                <td>0</td>
-                <td><a href="./fixtures-matchweek-NaN.json" target="_blank">View Fixtures</a></td>
-              </tr>
+              <a href="./gameweek-2.html" class="gameweek-card  complete">
+                <div class="gameweek-number">Gameweek 2</div>
+                <div class="gameweek-status">
+                  12 fixtures
+                  ✓
+                </div>
+                
+              </a>
             
-          </tbody>
-        </table>
-      </body>
-      </html>
-    
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; color: #6c757d; font-style: italic;">
+          Last updated: 12/08/2025, 09:57:13
+        </div>
+      </div>
+    </body>
+    </html>
+  

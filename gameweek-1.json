@@ -1,0 +1,115 @@
+{
+  "gameweek": 1,
+  "isComplete": true,
+  "fixtures": [
+    {
+      "homeTeam": "Accrington",
+      "awayTeam": "Gillingham",
+      "score": "1 - 1",
+      "date": "02/08/3925",
+      "time": "15:00",
+      "status": "completed",
+      "gameweek": 1
+    },
+    {
+      "homeTeam": "Barnet",
+      "awayTeam": "Fleetwood Town",
+      "score": "0 - 2",
+      "date": "02/08/3925",
+      "time": "15:00",
+      "status": "completed",
+      "gameweek": 1
+    },
+    {
+      "homeTeam": "Bristol Rvs",
+      "awayTeam": "Harrogate",
+      "score": "0 - 1",
+      "date": "02/08/3925",
+      "time": "15:00",
+      "status": "completed",
+      "gameweek": 1
+    },
+    {
+      "homeTeam": "Cambridge",
+      "awayTeam": "Cheltenham",
+      "score": "1 - 0",
+      "date": "02/08/3925",
+      "time": "15:00",
+      "status": "completed",
+      "gameweek": 1
+    },
+    {
+      "homeTeam": "Chesterfield",
+      "awayTeam": "Barrow",
+      "score": "1 - 0",
+      "date": "02/08/3925",
+      "time": "15:00",
+      "status": "completed",
+      "gameweek": 1
+    },
+    {
+      "homeTeam": "Colchester",
+      "awayTeam": "Tranmere",
+      "score": "1 - 1",
+      "date": "02/08/3925",
+      "time": "15:00",
+      "status": "completed",
+      "gameweek": 1
+    },
+    {
+      "homeTeam": "Grimsby",
+      "awayTeam": "Crawley Town",
+      "score": "3 - 0",
+      "date": "02/08/3925",
+      "time": "15:00",
+      "status": "completed",
+      "gameweek": 1
+    },
+    {
+      "homeTeam": "Milton Keynes Dons",
+      "awayTeam": "Oldham",
+      "score": "0 - 0",
+      "date": "02/08/3925",
+      "time": "15:00",
+      "status": "completed",
+      "gameweek": 1
+    },
+    {
+      "homeTeam": "Salford",
+      "awayTeam": "Crewe",
+      "score": "1 - 3",
+      "date": "02/08/3925",
+      "time": "15:00",
+      "status": "completed",
+      "gameweek": 1
+    },
+    {
+      "homeTeam": "Shrewsbury",
+      "awayTeam": "Bromley",
+      "score": "0 - 0",
+      "date": "02/08/3925",
+      "time": "15:00",
+      "status": "completed",
+      "gameweek": 1
+    },
+    {
+      "homeTeam": "Walsall",
+      "awayTeam": "Swindon",
+      "score": "2 - 1",
+      "date": "02/08/3925",
+      "time": "15:00",
+      "status": "completed",
+      "gameweek": 1
+    },
+    {
+      "homeTeam": "Newport County",
+      "awayTeam": "Notts County",
+      "score": "1 - 1",
+      "date": "02/08/3925",
+      "time": "16:00",
+      "status": "completed",
+      "gameweek": 1
+    }
+  ],
+  "lastUpdated": "2025-08-12T09:57:13.145Z"
+}
