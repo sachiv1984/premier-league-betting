@@ -13,12 +13,18 @@ async function downloadCSV(url, retries = 5, delay = 10000) {
     };
 
     https.get(url, options, (res) => {
-      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-        // Log the redirection URL for debugging
-        console.warn(`Redirected to: ${res.headers.location}`);
+      if (res.statusCode >= 300 && res.statusCode < 400) {
+        // Handle redirection
+        const location = res.headers.location;
+        if (!location) {
+          return reject(new Error(`Redirection status ${res.statusCode} received but no Location header provided.`));
+        }
 
-        // Handle relative redirection URLs
-        const redirectUrl = new URL(res.headers.location, url).href;
+        // Log the redirection URL
+        console.warn(`Redirected to: ${location}`);
+
+        // Resolve relative URLs to absolute URLs
+        const redirectUrl = new URL(location, url).href;
         console.warn(`Resolved redirect URL: ${redirectUrl}`);
 
         resolve(downloadCSV(redirectUrl, retries, delay));
