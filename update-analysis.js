@@ -2,27 +2,52 @@ import fs from 'fs/promises';
 import path from 'path';
 import { parse as csvParse } from 'csv-parse/sync';
 
+// Helper: Escape HTML entities in strings to prevent injection
+function escapeHtml(text) {
+  if (!text) return '';
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
 function parseDate(dateStr) {
   if (!dateStr) return null;
   const [day, month, year] = dateStr.split('/');
-  const fullYear = parseInt(year) < 50 ? 2000 + parseInt(year) : 1900 + parseInt(year);
-  return new Date(fullYear, parseInt(month) - 1, parseInt(day));
+  if (!day || !month || !year) return null;
+  const yr = parseInt(year, 10);
+  const fullYear = yr < 50 ? 2000 + yr : 1900 + yr;
+  return new Date(fullYear, parseInt(month, 10) - 1, parseInt(day, 10));
 }
 
+// Dynamically detect Premier League teams:
+// Teams that appear in a significant portion of the dataset, excluding obvious outliers
 function detectPremierLeagueTeams(records) {
   const teamMatchCounts = {};
-  records.forEach(record => {
-    if (record.HomeTeam && record.AwayTeam && record.Date) {
-      teamMatchCounts[record.HomeTeam] = (teamMatchCounts[record.HomeTeam] || 0) + 1;
-      teamMatchCounts[record.AwayTeam] = (teamMatchCounts[record.AwayTeam] || 0) + 1;
+  records.forEach(({ HomeTeam, AwayTeam, Date }) => {
+    if (HomeTeam && AwayTeam && Date) {
+      teamMatchCounts[HomeTeam] = (teamMatchCounts[HomeTeam] || 0) + 1;
+      teamMatchCounts[AwayTeam] = (teamMatchCounts[AwayTeam] || 0) + 1;
     }
   });
-  return Object.keys(teamMatchCounts)
-    .filter(team => {
-      const matchCount = teamMatchCounts[team];
-      return matchCount >= 30 && matchCount <= 40;
-    })
+
+  // Compute total matches (each record has 2 teams)
+  const totalMatches = records.length;
+  
+  // Consider teams that played at least ~60% of total matches
+  // (You can tune threshold as needed)
+  const threshold = totalMatches * 0.6;
+
+  const filteredTeams = Object.entries(teamMatchCounts)
+    .filter(([_, count]) => count >= threshold)
+    .map(([team]) => team)
     .sort();
+
+  // For debugging:
+  // console.log('Detected Premier League Teams:', filteredTeams);
+  return filteredTeams;
 }
 
 function isPremierLeagueMatch(homeTeam, awayTeam, premierLeagueTeams) {
@@ -37,15 +62,24 @@ function calculateGameweek(matchDate, seasonStartDate) {
 
 function getMatchStatus(matchDate, homeGoals, awayGoals) {
   const now = new Date();
-  const matchTime = new Date(matchDate);
-  if (homeGoals !== '' && awayGoals !== '' && !isNaN(homeGoals) && !isNaN(awayGoals)) {
+
+  if (
+    homeGoals !== '' &&
+    awayGoals !== '' &&
+    !isNaN(homeGoals) &&
+    !isNaN(awayGoals)
+  ) {
     return 'completed';
   }
-  const twoHoursAgo = new Date(now.getTime() - (2 * 60 * 60 * 1000));
-  if (matchTime < twoHoursAgo && matchTime > new Date(now.getTime() - (24 * 60 * 60 * 1000))) {
+  if (!matchDate) return 'upcoming';
+
+  const matchStart = new Date(matchDate);
+  const matchEnd = new Date(matchStart.getTime() + 2 * 60 * 60 * 1000); // 2 hours after start
+
+  if (now >= matchStart && now <= matchEnd) {
     return 'ongoing';
   }
-  if (matchTime < now) {
+  if (now > matchEnd) {
     return 'postponed';
   }
   return 'upcoming';
@@ -119,9 +153,10 @@ async function main() {
 
     if (validRecords.length === 0) {
       console.error('No valid fixture records found');
+      process.exit(1);
     }
 
-    const seasonStart = validRecords.length ? validRecords[0].parsedDate : new Date();
+    const seasonStart = validRecords[0].parsedDate;
     const fixturesWithGameweeks = validRecords.map(record => ({
       ...record,
       gameweek: calculateGameweek(record.parsedDate, seasonStart)
@@ -143,14 +178,16 @@ async function main() {
     // Save JSON data for API use
     const jsonOutput = {
       gameweek: targetGameweek,
-      isComplete: isComplete,
+      isComplete,
       fixtures: formattedFixtures,
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
+      premierLeagueTeams,        // optionally add detected teams info here
+      seasonStart: seasonStart.toISOString()
     };
     const jsonOutputPath = path.resolve(`./public/gameweek-${targetGameweek}.json`);
     await fs.writeFile(jsonOutputPath, JSON.stringify(jsonOutput, null, 2));
 
-    // Always generate HTML pages & index
+    // Generate HTML pages & index
     await generateAllGameweekPages(fixturesByGameweek);
     await generateMainIndex(fixturesByGameweek);
 
@@ -198,7 +235,7 @@ async function generateAllGameweekPages(fixturesByGameweek) {
     const formattedFixtures = fixtures.map(formatMatch);
 
     const matchesHtml = formattedFixtures.map(match => {
-      return `<li>${match.homeTeam} vs ${match.awayTeam} - ${match.score} (${match.status})</li>`;
+      return `<li>${escapeHtml(match.homeTeam)} vs ${escapeHtml(match.awayTeam)} - ${escapeHtml(match.score)} (${escapeHtml(match.status)})</li>`;
     }).join('\n');
 
     const htmlContent = `
@@ -226,3 +263,4 @@ async function generateAllGameweekPages(fixturesByGameweek) {
 }
 
 main();
+
