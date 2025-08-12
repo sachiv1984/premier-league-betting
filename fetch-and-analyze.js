@@ -2,7 +2,8 @@ import fs from 'fs/promises';
 import https from 'https';
 import { parse } from 'csv-parse/sync';
 
-const CSV_URL = 'https://www.football-data.co.uk/mmz4281/2526/E0.csv';
+const BASE_URL = 'https://www.football-data.co.uk';
+const CSV_URL = `${BASE_URL}/mmz4281/2526/E0.csv`;
 
 async function downloadCSV(url, retries = 5, delay = 10000) {
   return new Promise((resolve, reject) => {
@@ -29,11 +30,21 @@ async function downloadCSV(url, retries = 5, delay = 10000) {
                 2
               )}. Response body: ${body}`
             );
-            reject(
-              new Error(
-                `Redirection status ${res.statusCode} received but no Location header provided.`
-              )
-            );
+
+            // Extract suggested URLs from the response body
+            const matches = [...body.matchAll(/<a href="([^"]+)">/g)];
+            const suggestions = matches.map((match) => match[1]);
+
+            if (suggestions.length > 0) {
+              console.warn(`Suggested files: ${suggestions.join(', ')}`);
+              resolve(suggestions.map((path) => `${BASE_URL}${path}`)); // Return full URLs
+            } else {
+              reject(
+                new Error(
+                  `Redirection status ${res.statusCode} received but no Location header or suggestions provided.`
+                )
+              );
+            }
           });
           return;
         }
@@ -67,7 +78,24 @@ async function downloadCSV(url, retries = 5, delay = 10000) {
 async function main() {
   try {
     console.log('Downloading CSV...');
-    const csvData = await downloadCSV(CSV_URL);
+    let csvData = await downloadCSV(CSV_URL);
+
+    // If the result is an array of suggested URLs, try them one by one
+    if (Array.isArray(csvData)) {
+      for (const url of csvData) {
+        try {
+          console.log(`Trying suggested URL: ${url}`);
+          csvData = await downloadCSV(url);
+          break; // Exit the loop if successful
+        } catch (err) {
+          console.warn(`Failed to download from suggested URL: ${url}`);
+        }
+      }
+
+      if (Array.isArray(csvData)) {
+        throw new Error('Failed to download CSV from all suggested URLs.');
+      }
+    }
 
     console.log('Parsing CSV...');
     const records = parse(csvData, {
