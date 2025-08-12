@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import csvParse from 'csv-parse/lib/sync';
+import { parse as csvParse } from 'csv-parse/sync'; // Corrected import
 
 async function main() {
   try {
