@@ -4,12 +4,21 @@ import { parse } from 'csv-parse/sync';
 
 const CSV_URL = 'https://www.football-data.co.uk/mmz4281/2526/E0.csv';
 
-async function downloadCSV(url) {
+async function downloadCSV(url, retries = 3, delay = 5000) {
   return new Promise((resolve, reject) => {
     https.get(url, (res) => {
+      if (res.statusCode === 429 && retries > 0) {
+        console.warn(`Rate limited. Retrying in ${delay / 1000} seconds...`);
+        setTimeout(() => {
+          resolve(downloadCSV(url, retries - 1, delay));
+        }, delay);
+        return;
+      }
+
       if (res.statusCode !== 200) {
         return reject(new Error(`Failed to get CSV, status ${res.statusCode}`));
       }
+
       let data = '';
       res.on('data', (chunk) => (data += chunk));
       res.on('end', () => resolve(data));
